@@ -81,75 +81,72 @@ func (s *Http) Get() {
     return
   }
 
-  var open = fmt.Sprintf("\x1b[1;36m[\x1b[1;31m")
-  var close = fmt.Sprintf("\x1b[1;36m]\x1b[0m")
-
   var result string
   if bytes.Contains(body, []byte("ERROR: The request could not be satisfied")) {
-    result = fmt.Sprintf("%sCLOUDFRONT%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[CLOUDFRONT]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Fastly error: unknown domain")) {
-    result = fmt.Sprintf("%sFASTLY%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[FASTLY]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("There isn't a GitHub Pages site here.")) {
-    result = fmt.Sprintf("%sGITHUB%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[GITHUB]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("herokucdn.com/error-pages/no-such-app.html")) {
-    result = fmt.Sprintf("%sHEROKU%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[HEROKU]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("The gods are wise, but do not know of the site which you seek.")) {
-    result = fmt.Sprintf("%sPANTHEON%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[PANTHEON]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Whatever you were looking for doesn't currently exist at this address.")) {
-    result = fmt.Sprintf("%sTUMBLR%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[TUMBLR]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Do you want to register")) {
-    result = fmt.Sprintf("%sWORDPRESS%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[WORDPRESS]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Sorry, We Couldn't Find That Page")) {
-    result = fmt.Sprintf("%sDESK%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[DESK]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Help Center Closed")) {
-    result = fmt.Sprintf("%sZENDESK%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[ZENDESK]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Oops - We didn't find your site.")) {
-    result = fmt.Sprintf("%sTEAMWORK%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[TEAMWORK]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("We could not find what you're looking for.")) {
-    result = fmt.Sprintf("%sHELPJUICE%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[HELPJUICE]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("No settings were found for this company:")) {
-    result = fmt.Sprintf("%sHELPSCOUT%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[HELPSCOUT]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("The specified bucket does not exist")) {
-    result = fmt.Sprintf("%sS3 BUCKET%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[S3 BUCKET]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("The thing you were looking for is no longer here, or never was")) {
-    result = fmt.Sprintf("%sGHOST%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[GHOST]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("If you're moving your domain away from Cargo you must make this configuration through your registrar's DNS control panel.")) {
-    result = fmt.Sprintf("%sCARGO%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[CARGO]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("The feed has not been found.")) {
-    result = fmt.Sprintf("%sFEEDPRESS%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[FEEDPRESS]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("May be this is still fresh!")) {
-    result = fmt.Sprintf("%sFRESHDESK%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[FRESHDESK]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("Sorry, this shop is currently unavailable.")) {
-    result = fmt.Sprintf("%sSHOPIFY%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[SHOPIFY]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("You are being <a href=\"https://www.statuspage.io\">redirected")) {
-    result = fmt.Sprintf("%sSTATUSPAGE%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[STATUSPAGE]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("This domain is successfully pointed at WP Engine, but is not configured for an account on our platform")) {
-    result = fmt.Sprintf("%sWPENGINE%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[WPENGINE]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("This UserVoice subdomain is currently available!")) {
-    result = fmt.Sprintf("%sUSERVOICE%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[USERVOICE]  %v \n", s.Url)
   }
   if bytes.Contains(body, []byte("project not found")) {
-    result = fmt.Sprintf("%sSURGE%s  %v \n", open, close, s.Url)
+    result = fmt.Sprintf("[SURGE]  %v \n", s.Url)
   }
 
   if strings.ContainsAny(result, "[]") {
