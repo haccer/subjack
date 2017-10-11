@@ -3,10 +3,12 @@
 # Example : ./scanio.sh 20171006 cname_list.txt
 
 # Gathering data from scans.io and parsing it into a file called cname,
-echo "[+] Grabbing CNAME records from scans.io."
-curl -s https://scans.io/data/rapid7/sonar.fdns_v2/$1-fdns.json.gz | \
-  zcat | grep 'type":"cname' | awk -F'":"' '{print $3, $5}' | \
-  awk -F'"' '{print $1, $3}' | sed -e s/" type "/" "/g >> cname_scanio
+echo "[+] Downloading Project Sonar (This may take a while)."
+wget https://scans.io/data/rapid7/sonar.fdns_v2/$1-fdns.json.gz
+
+echo "[+] Grabbing CNAME records."
+zcat $1-fdns.json.gz | grep 'type":"cname' | awk -F'":"' '{print $3, $5}' | \
+  awk -F'"' '{print $1, $3}' | sed -e s/" type "/" "/g >> cname_scanio  
 
 # List of cnames we're going to grep for.
 declare -a arr=(
