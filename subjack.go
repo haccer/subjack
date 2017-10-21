@@ -83,7 +83,9 @@ func (s *Http) Get() {
 
   var result string
   if bytes.Contains(body, []byte("ERROR: The request could not be satisfied")) {
-    result = fmt.Sprintf("[CLOUDFRONT]  %v \n", s.Url)
+    if bytes.Contains(body, []byte("Bad request.")) {
+      result = fmt.Sprintf("[CLOUDFRONT]  %v \n", s.Url)
+    }
   }
   if bytes.Contains(body, []byte("Fastly error: unknown domain")) {
     result = fmt.Sprintf("[FASTLY]  %v \n", s.Url)
