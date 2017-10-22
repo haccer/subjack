@@ -72,7 +72,6 @@ func (s *Http) Get() {
   }
   resp, err := client.Get(site)
   if err != nil {
-    //fmt.Println(err)
     return
   }
   defer resp.Body.Close()
