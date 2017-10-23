@@ -12,42 +12,44 @@ zcat $1-fdns.json.gz | grep 'type":"cname' | awk -F'":"' '{print $3, $5}' | \
 
 # List of cnames we're going to grep for.
 declare -a arr=(
-  ".cloudfront.net"
-  ".s3-website"
-  ".s3.amazonaws.com"
+  "\.cloudfront.net"
+  "\.s3-website"
+  "\.s3.amazonaws.com"
   "w.amazonaws.com"
   "1.amazonaws.com"
   "2.amazonaws.com"
   "s3-external"
   "s3-accelerate.amazonaws.com"
-  ".herokuapp.com"
-  ".herokussl.com"
-  ".herokudns.com"
-  ".wordpress.com"
-  ".pantheonsite.io"
+  "\.herokuapp.com"
+  "\.herokussl.com"
+  "\.herokudns.com"
+  "\.wordpress.com"
+  "\.pantheonsite.io"
   "domains.tumblr.com"
-  ".wpengine.com"
-  ".desk.com"
-  ".zendesk.com"
-  ".github.io"
-  ".global.fastly.net"
-  ".helpjuice.com"
-  ".helpscoutdocs.com"
-  ".ghost.io"
+  "\.wpengine.com"
+  "\.desk.com"
+  "\.zendesk.com"
+  "\.github.io"
+  "\.global.fastly.net"
+  "\.helpjuice.com"
+  "\.helpscoutdocs.com"
+  "\.ghost.io"
   "cargocollective.com"
   "redirect.feedpress.me"
-  ".freshdesk.com"
-  ".myshopify.com"
-  ".statuspage.io"
-  ".uservoice.com"
-  ".surge.sh"
+  "\.freshdesk.com"
+  "\.myshopify.com"
+  "\.statuspage.io"
+  "\.uservoice.com"
+  "\.surge.sh"
 )
 
+#Joining elements together.
+function join_by { local IFS="$1"; shift; echo "$*"; }
+DOMAINS=$(join_by '|' "${arr[@]}")
+
 # Grepping cnames from array.
-echo "[+] Sorting CNAME records for interesting content."
-for i in "${arr[@]}"; do
-  grep -F "$i" cname_scanio >> cname_db
-done
+echo "[+] Sorting CNAME records."
+grep -E "${DOMAINS}" cname_scanio >> cname_db
 
 # Sorting cname list
 echo "[+] Cleaning up."
