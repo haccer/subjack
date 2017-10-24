@@ -58,9 +58,9 @@ func write(result string) {
 func (s *Http) Get() {
   var site string
   if *Https {
-    site = fmt.Sprintf("https://%s", s.Url)
+    site = fmt.Sprintf("https://%v", s.Url)
   } else {
-    site = fmt.Sprintf("http://%s", s.Url)
+    site = fmt.Sprintf("http://%v", s.Url)
   }
 
   tr := &http.Transport{
