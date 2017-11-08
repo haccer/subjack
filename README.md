@@ -37,7 +37,7 @@ Currently checks for:
 - WP Engine
 
 ## Screenshots
-
+<img src="https://i.imgur.com/xfjSuwW.jpg" />
 <img src="https://i.imgur.com/2bZF0Ge.png" />
 
 ## Practical Use
