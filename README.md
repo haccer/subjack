@@ -44,6 +44,24 @@ Currently checks for:
 
 I've included `scanio.sh` which is kind of a PoC script to mass-locate vulnerable subdomains using results from Rapid7's Project Sonar. This script parses and greps through the dump for desired CNAME records and makes a large list of subdomains to check with subjack if they're vulnerable to Hostile Subdomain Takeover. Of course this isn't the only method to get a large amount of data to test. **Please use this responsibly ;)**
 
+## FAQ
+**Q:** What should my wordlist look like?
+
+**A:** Your wordlist should include a list of subdomains you're checking and should look something like:
+```
+assets.cody.su
+assets.github.com
+b.cody.su
+big.example.com
+cdn.cody.su
+dev.cody.su
+dev2.twitter.com
+```
+
+**Q:** I ran my scan and nothing happened. What does this mean?
+
+**A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
+
 ## Resources
 
 For more info, check out my blog post: https://cody.su/blog/hostile-subdomain-takeovers/.
