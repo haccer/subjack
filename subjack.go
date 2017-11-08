@@ -166,6 +166,7 @@ func magic() {
   if err != nil {
     fmt.Println("Error Getting Rlimit ", err)
   }
+  // In the special case your domain list is over 1 mil, increase these numbers.
   rLimit.Max = 999999
   rLimit.Cur = 999999
   err = syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
@@ -178,8 +179,31 @@ func magic() {
   }
 }
 
+func banner() {
+  blue := "\x1b[1;36m"
+  red := "\x1b[1;31m"
+  clear := "\x1b[0m"
+
+  ascii := fmt.Sprintf(`%s
+    ████████  ███    ███ █████████  ███████████ ███      ████████  ███    ███
+   █▒█    ███ █▒█    ███ ███    ███     ███   ███ ███   ███    ███ ███   ███
+   ██▒        ███    ██▒ ▒█▒    ██▒     ██▒  ▒█▒   ▒█▒  ███        ██▒  ▒██
+   █▒█▒█▒▒▒▒▒ █▒▒    ▒██ █████▒▒▒▒      ▒▒█ ▒▒▒▒█▒▒▒▒▒█ ▒██        ██▒▒██▒
+          ▒▒▒ ▒░▒    ▒▒█ ▒█▒    ▒░▒     ▒░█ ▒░▒     ▒▒▒ ▒█▒        ▒▒▒  ▒▒▒
+   ░▒░    ░▒░ ░▒░    ░▒░ ░▒░    ░▒░ ░▒░ ░▒░ ░▒░     ░▒░ ░▒░    ░▒░ ░▒░   ░▒░
+     ░░░░░░     ░░░░░░    ░░░░░░░     ░░░    ░       ░    ░░░░░░    ░      ░
+
+        %s~[ H 0 S T I L E  S U B D 0 M A I N  T A K E 0 V E R  T 0 0 L ]~
+                    For support, ping me on Twitter: @now
+  %s`, blue, red, clear)
+
+  fmt.Println(ascii)
+}
+
 func main() {
   flag.Parse()
+  
+  banner()
 
   urls := make(chan *Http, *Threads * 10)
   list, err := getDomains(*Wordlist)
