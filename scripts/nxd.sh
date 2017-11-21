@@ -13,7 +13,7 @@ for ((i=1; i<$max;++i)); do
   if [ ${if_domain} -eq "1" ]; then
     lines=$(nslookup ${domain} | grep NXDOMAIN | wc -l)
     if [ ${lines} -eq "1" ]; then
-      echo "${domain} is dead."
+      echo "${r} - ${domain} is dead."
     fi
   fi
 done
