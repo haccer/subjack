@@ -8,6 +8,7 @@ import (
   "flag"
   "io/ioutil"
   "log"
+  "net"
   "net/http"
   "os"
   "strings"
@@ -22,6 +23,7 @@ var (
   Timeout  = flag.Int("timeout", 10, "Seconds to wait before timeout connection.")
   Output   = flag.String("o", "", "Output file to write results to.")
   Https    = flag.Bool("https", false, "Force HTTPS (May increase accuracy. Default: http://).")
+  Strict   = flag.Bool("strict", false, "Find those hidden gems by sending HTTP requests to every URL. (Default: HTTP requests are only sent to URLs with cloud CNAMEs).")
 )
 
 type Http struct {
@@ -55,12 +57,12 @@ func write(result string) {
   }
 }
 
-func (s *Http) Get() {
+func get(url string) {
   var site string
   if *Https {
-    site = fmt.Sprintf("https://%v", s.Url)
+    site = fmt.Sprintf("https://%s", url)
   } else {
-    site = fmt.Sprintf("http://%v", s.Url)
+    site = fmt.Sprintf("http://%s", url)
   }
 
   tr := &http.Transport{
@@ -83,71 +85,71 @@ func (s *Http) Get() {
   var result string
   if bytes.Contains(body, []byte("ERROR: The request could not be satisfied")) {
     if bytes.Contains(body, []byte("Bad request.")) {
-      result = fmt.Sprintf("[CLOUDFRONT]  %v \n", s.Url)
+      result = fmt.Sprintf("[CLOUDFRONT]  %s \n", url)
     }
   }
   if bytes.Contains(body, []byte("Fastly error: unknown domain")) {
-    result = fmt.Sprintf("[FASTLY]  %v \n", s.Url)
+    result = fmt.Sprintf("[FASTLY]  %s \n", url)
   }
   if bytes.Contains(body, []byte("There isn't a GitHub Pages site here.")) {
-    result = fmt.Sprintf("[GITHUB]  %v \n", s.Url)
+    result = fmt.Sprintf("[GITHUB]  %s \n", url)
   }
   if bytes.Contains(body, []byte("herokucdn.com/error-pages/no-such-app.html")) {
-    result = fmt.Sprintf("[HEROKU]  %v \n", s.Url)
+    result = fmt.Sprintf("[HEROKU]  %s \n", url)
   }
   if bytes.Contains(body, []byte("The gods are wise, but do not know of the site which you seek.")) {
-    result = fmt.Sprintf("[PANTHEON]  %v \n", s.Url)
+    result = fmt.Sprintf("[PANTHEON]  %s \n", url)
   }
   if bytes.Contains(body, []byte("Whatever you were looking for doesn't currently exist at this address.")) {
-    result = fmt.Sprintf("[TUMBLR]  %v \n", s.Url)
+    result = fmt.Sprintf("[TUMBLR]  %s \n", url)
   }
   if bytes.Contains(body, []byte("Do you want to register")) {
-    result = fmt.Sprintf("[WORDPRESS]  %v \n", s.Url)
+    result = fmt.Sprintf("[WORDPRESS]  %s \n", url)
   }
   if bytes.Contains(body, []byte("Sorry, We Couldn't Find That Page")) {
-    result = fmt.Sprintf("[DESK]  %v \n", s.Url)
+    result = fmt.Sprintf("[DESK]  %s \n", url)
   }
   if bytes.Contains(body, []byte("Help Center Closed")) {
-    result = fmt.Sprintf("[ZENDESK]  %v \n", s.Url)
+    result = fmt.Sprintf("[ZENDESK]  %s \n", url)
   }
   if bytes.Contains(body, []byte("Oops - We didn't find your site.")) {
-    result = fmt.Sprintf("[TEAMWORK]  %v \n", s.Url)
+    result = fmt.Sprintf("[TEAMWORK]  %s \n", url)
   }
   if bytes.Contains(body, []byte("We could not find what you're looking for.")) {
-    result = fmt.Sprintf("[HELPJUICE]  %v \n", s.Url)
+    result = fmt.Sprintf("[HELPJUICE]  %s \n", url)
   }
   if bytes.Contains(body, []byte("No settings were found for this company:")) {
-    result = fmt.Sprintf("[HELPSCOUT]  %v \n", s.Url)
+    result = fmt.Sprintf("[HELPSCOUT]  %s \n", url)
   }
   if bytes.Contains(body, []byte("The specified bucket does not exist")) {
-    result = fmt.Sprintf("[S3 BUCKET]  %v \n", s.Url)
+    result = fmt.Sprintf("[S3 BUCKET]  %s \n", url)
   }
   if bytes.Contains(body, []byte("The thing you were looking for is no longer here, or never was")) {
-    result = fmt.Sprintf("[GHOST]  %v \n", s.Url)
+    result = fmt.Sprintf("[GHOST]  %s \n", url)
   }
   if bytes.Contains(body, []byte("If you're moving your domain away from Cargo you must make this configuration through your registrar's DNS control panel.")) {
-    result = fmt.Sprintf("[CARGO]  %v \n", s.Url)
+    result = fmt.Sprintf("[CARGO]  %s \n", url)
   }
   if bytes.Contains(body, []byte("The feed has not been found.")) {
-    result = fmt.Sprintf("[FEEDPRESS]  %v \n", s.Url)
+    result = fmt.Sprintf("[FEEDPRESS]  %s \n", url)
   }
   if bytes.Contains(body, []byte("May be this is still fresh!")) {
-    result = fmt.Sprintf("[FRESHDESK]  %v \n", s.Url)
+    result = fmt.Sprintf("[FRESHDESK]  %s \n", url)
   }
   if bytes.Contains(body, []byte("Sorry, this shop is currently unavailable.")) {
-    result = fmt.Sprintf("[SHOPIFY]  %v \n", s.Url)
+    result = fmt.Sprintf("[SHOPIFY]  %s \n", url)
   }
   if bytes.Contains(body, []byte("You are being <a href=\"https://www.statuspage.io\">redirected")) {
-    result = fmt.Sprintf("[STATUSPAGE]  %v \n", s.Url)
+    result = fmt.Sprintf("[STATUSPAGE]  %s \n", url)
   }
   if bytes.Contains(body, []byte("This domain is successfully pointed at WP Engine, but is not configured for an account on our platform")) {
-    result = fmt.Sprintf("[WPENGINE]  %v \n", s.Url)
+    result = fmt.Sprintf("[WPENGINE]  %s \n", url)
   }
   if bytes.Contains(body, []byte("This UserVoice subdomain is currently available!")) {
-    result = fmt.Sprintf("[USERVOICE]  %v \n", s.Url)
+    result = fmt.Sprintf("[USERVOICE]  %s \n", url)
   }
   if bytes.Contains(body, []byte("project not found")) {
-    result = fmt.Sprintf("[SURGE]  %v \n", s.Url)
+    result = fmt.Sprintf("[SURGE]  %s \n", url)
   }
 
   if strings.ContainsAny(result, "[]") {
@@ -159,8 +161,50 @@ func (s *Http) Get() {
   }
 }
 
+func (s *Http) DNS() {
+
+  if *Strict {
+    get(s.Url)
+  } else {
+    cname, err := net.LookupCNAME(s.Url)
+    if err != nil {
+      return
+    }
+
+    cnames := []string{
+      ".cloudfront.net",
+      "amazonaws",
+      "heroku",
+      "wordpress.com",
+      "pantheonsite.io",
+      "domains.tumblr.com",
+      "wpengine.com",
+      "desk.com",
+      "zendesk.com",
+      "github.io",
+      "fastly",
+      "helpjuice.com",
+      "helpscoutdocs.com",
+      "ghost.io",
+      "cargocollective.com",
+      "redirect.feedpress.me",
+      ".freshdesk.com",
+      ".myshopify.com",
+      ".statuspage.io",
+      ".uservoice.com",
+      ".surge.sh",
+    }
+
+    for _, cn := range cnames {
+      if strings.Contains(cname, cn) {
+        get(s.Url)
+      }
+    }
+  }
+}
+
 func magic() {
-  /* For large files */
+  /* For large files: This raises the system's ulimit. */
   var rLimit syscall.Rlimit
   err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
   if err != nil {
@@ -179,38 +223,15 @@ func magic() {
   }
 }
 
-func banner() {
-  blue := "\x1b[1;36m"
-  red := "\x1b[1;31m"
-  clear := "\x1b[0m"
-
-  ascii := fmt.Sprintf(`%s
-    ████████  ███    ███ █████████  ███████████ ███      ████████  ███    ███
-   █▒█    ███ █▒█    ███ ███    ███     ███   ███ ███   ███    ███ ███   ███
-   ██▒        ███    ██▒ ▒█▒    ██▒     ██▒  ▒█▒   ▒█▒  ███        ██▒  ▒██
-   █▒█▒█▒▒▒▒▒ █▒▒    ▒██ █████▒▒▒▒      ▒▒█ ▒▒▒▒█▒▒▒▒▒█ ▒██        ██▒▒██▒
-          ▒▒▒ ▒░▒    ▒▒█ ▒█▒    ▒░▒     ▒░█ ▒░▒     ▒▒▒ ▒█▒        ▒▒▒  ▒▒▒
-   ░▒░    ░▒░ ░▒░    ░▒░ ░▒░    ░▒░ ░▒░ ░▒░ ░▒░     ░▒░ ░▒░    ░▒░ ░▒░   ░▒░
-     ░░░░░░     ░░░░░░    ░░░░░░░     ░░░    ░       ░    ░░░░░░    ░      ░
-
-        %s~[ H 0 S T I L E  S U B D 0 M A I N  T A K E 0 V E R  T 0 0 L ]~
-                    For support, ping me on Twitter: @now
-  %s`, blue, red, clear)
-
-  fmt.Println(ascii)
-}
-
 func main() {
   flag.Parse()
   
-  banner()
-
   urls := make(chan *Http, *Threads * 10)
   list, err := getDomains(*Wordlist)
   if err != nil {
     log.Fatalln(err)
   }
-
+  
   if len(list) > 1024 {
     magic()
   }
@@ -220,7 +241,7 @@ func main() {
     wg.Add(1)
     go func() {
       for url := range urls {
-        url.Get()
+        url.DNS()
       }
       wg.Done()
     }()
