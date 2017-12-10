@@ -16,6 +16,7 @@ You need have [Go](https://golang.org/) installed. Full details of installation 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
 - `-o results.txt` where to save results to (Optional).
 - `-https` enforces https requests which may return a different set of results and increase accuracy (Optional).
+- `-strict` sends HTTP requests to every URL (Optional).
 
 Currently checks for:
 - Amazon S3 Bucket
@@ -62,6 +63,16 @@ dev2.twitter.com
 
 **A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
 
+## Changelog
+### 12/10/17
+- Removed:
+  - Banner (I hate banners actually.)
+- Added:
+  - `Strict feature` keeps the option to make HTTP requests to every URL, this finds sites vulnerable that have A records attached instead of CNAMEs.
+  - `Detection via DNS` [(Because this is **a lot faster/smarter** than making HTTP requests to every URL)](https://github.com/haccer/subjack/issues/1)
+- Fixed:
+  - `Pesky 408 errors` that were annoying me (Thanks DNS Detection.)
+  
 ## Resources
 
 For more info, check out my blog post: https://cody.su/blog/hostile-subdomain-takeovers/.
