@@ -66,7 +66,7 @@ dev2.twitter.com
 ## Changelog
 ### 12/10/17
 - Removed:
-  - Banner (I hate banners actually.)
+  - `Banner` (I hate banners actually.)
 - Added:
   - `Strict feature` keeps the option to make HTTP requests to every URL, this finds sites vulnerable that have A records attached instead of CNAMEs.
   - `Detection via DNS` [(Because this is **a lot faster/smarter** than making HTTP requests to every URL)](https://github.com/haccer/subjack/issues/1)
