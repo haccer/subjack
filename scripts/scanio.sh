@@ -1,13 +1,13 @@
 #!/bin/bash
 # Usage   : ./scanio.sh <version number> <file>
-# Example : ./scanio.sh 20171006 cname_list.txt
+# Example : ./scanio.sh 2017-12-08-1512720001-fdns_a.json.gz cname_list.txt
 
 # Gathering data from scans.io and parsing it into a file called cname,
 echo "[+] Downloading Project Sonar (This may take a while)."
-wget https://scans.io/data/rapid7/sonar.fdns_v2/$1-fdns.json.gz
+wget https://scans.io/data/rapid7/sonar.fdns_v2/$1
 
 echo "[+] Grabbing CNAME records."
-zcat $1-fdns.json.gz | grep 'type":"cname' | awk -F'":"' '{print $3, $5}' | \
+zcat $1 | grep 'type":"cname' | awk -F'":"' '{print $3, $5}' | \
   awk -F'"' '{print $1, $3}' | sed -e s/" type "/" "/g >> cname_scanio  
 
 # List of cnames we're going to grep for.
