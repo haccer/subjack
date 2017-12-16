@@ -226,6 +226,16 @@ func magic() {
 func main() {
   flag.Parse()
   
+  flag.Usage = func() {
+    fmt.Printf("Usage of %s:\n", os.Args[0])
+    flag.PrintDefaults()
+  }
+
+  if flag.NArg() == 0 {
+    flag.Usage()
+    os.Exit(1)
+  }
+  
   urls := make(chan *Http, *Threads * 10)
   list, err := getDomains(*Wordlist)
   if err != nil {
