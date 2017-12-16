@@ -231,7 +231,7 @@ func main() {
     flag.PrintDefaults()
   }
 
-  if flag.NArg() == 0 {
+  if flag.NFlag() == 0 {
     flag.Usage()
     os.Exit(1)
   }
