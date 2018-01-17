@@ -78,10 +78,6 @@ dev2.twitter.com
   - `Detection via DNS` [(Because this is **a lot faster/smarter** than making HTTP requests to every URL)](https://github.com/haccer/subjack/issues/1)
 - Fixed:
   - `Pesky 408 errors` that were annoying me (Thanks DNS Detection.)
-  
-## Resources
-
-For more info, check out my blog post: https://cody.su/blog/hostile-subdomain-takeovers/.
 
 ## Contact
 
