@@ -64,6 +64,12 @@ dev2.twitter.com
 **A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
 
 ## Changelog
+### 1/17/18
+- Removed:
+  - `ulimit function` Raising the ulimit was a temporary fix to "too many open files" error that would kill the program.
+- Added:
+  - Windows compatibility.
+  - Cleaned and reformatted code.
 ### 12/10/17
 - Removed:
   - `Banner` (I hate banners actually.)
