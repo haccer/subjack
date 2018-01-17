@@ -68,8 +68,8 @@ dev2.twitter.com
 - Removed:
   - `ulimit function` Raising the ulimit was a temporary fix to "too many open files" error that would kill the program.
 - Added:
-  - Windows compatibility.
-  - Cleaned and reformatted code.
+  - `Windows compatibility` since we no longer need to raise the ulimit.
+  - `Cleaned code` to be a little more efficient and formatted with gofmt.
 ### 12/10/17
 - Removed:
   - `Banner` (I hate banners actually.)
