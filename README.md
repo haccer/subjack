@@ -66,7 +66,7 @@ dev2.twitter.com
 ## Changelog
 ### 1/17/18
 - Removed:
-  - `ulimit function` Raising the ulimit was a temporary fix to "too many open files" error that would kill the program.
+  - `ulimit function` Raising the ulimit was a temporary fix to a "too many open files" socket error that would kill the program.
 - Added:
   - `Windows compatibility` since we no longer need to raise the ulimit.
   - `Cleaned code` to be a little more efficient and formatted with gofmt.
