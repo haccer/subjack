@@ -44,7 +44,6 @@ cmd="wget -q https://scans.io/data/rapid7/sonar.fdns_v2/$1"
 run "Downloading $1 (This may take a while)." "$cmd" "Finished Downloading $1"
 
 # Parsing it into a file called cname_scanio
-
 msg="Grepping for CNAME records."
 ech $msg &
 pid=$!
