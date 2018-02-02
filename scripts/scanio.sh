@@ -32,11 +32,18 @@ function die() {
   echo -e "\r[*] $2"
 }
 
-# Gathering data from scans.io and parsing it into a file called cname_scanio
-ech "Downloading $1 (This may take a while)." &
-pid=$!
-wget -q https://scans.io/data/rapid7/sonar.fdns_v2/$1
-die $pid "Downloaded $1" "Downloading $1 (This may take a while)."
+function run() {
+  ech "$1" &
+  pid=$!
+  eval "$2"
+  die $pid "$3" "$1"
+}
+
+# Gathering data from scans.io
+cmd="wget -q https://scans.io/data/rapid7/sonar.fdns_v2/$1"
+run "Downloading $1 (This may take a while)." "$cmd" "Finished Downloading $1"
+
+# Parsing it into a file called cname_scanio
 
 msg="Grepping for CNAME records."
 ech $msg &
@@ -82,18 +89,12 @@ declare -a arr=(
 DOMAINS=$(join_by '|' ${arr[@]})
 
 # Grepping CNAMEs from the array
-msg="Sorting CNAME records."
-ech $msg &
-pid=$!
-grep -Ei "${DOMAINS}" cname_scanio >> cname_db
-die $pid "CNAME records sorted." $msg
+cmd="grep -Ei '${DOMAINS}' cname_scanio >> cname_db"
+run "Sorting CNAME records." "$cmd" "CNAME records sorted."
 
 # Sorting the CNAME list
-msg="Cleaing up."
-ech $msg &
-pid=$!
-cat cname_db | awk '{print $1}' | sort | uniq >> $2
-die $pid "Cleaned up." $msg
+cmd="cat cname_db | awk '{print $1}' | sort | uniq >> $2"
+run "Cleaning up." "$cmd" "Cleaned up."
 
 # RM files.
 rm cname_db cname_scanio
