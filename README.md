@@ -47,7 +47,7 @@ Currently checks for:
 -->
 
 ## In Action
-<img src="https://i.imgur.com/FkpJduu.gifv" />
+<img src="https://i.imgur.com/FkpJduu.gif" />
 
 ## Practical Use
 
