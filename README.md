@@ -47,7 +47,7 @@ Currently checks for:
 -->
 
 ## In Action
-![In Realtime]<img src="https://i.imgur.com/FkpJduu.gif" />
+![In Realtime](https://i.imgur.com/FkpJduu.gif)
 
 ## Practical Use
 
