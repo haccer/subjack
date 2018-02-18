@@ -247,8 +247,6 @@ func Process() {
 	}
 
 	for i := 0; i < len(list); i++ {
-		//TODO - Progress bar. Never increments in order cuz concurrency.
-		//Progress := fmt.Sprintf("%d/%d", i+1, len(list))
 		Progress := fmt.Sprintf("%d", len(list))
 		urls <- &Http{Url: list[i], Num: Progress}
 	}
