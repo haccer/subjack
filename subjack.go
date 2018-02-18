@@ -131,6 +131,7 @@ func Identify(url string) (service string) {
 		"This UserVoice subdomain is currently available!":                                                       "USERVOICE",
 		"project not found":                                                                                      "SURGE",
 		"Unrecognized domain <strong>":                                                                           "MASHERY",
+		"Repository not found":                                                                                   "BITBUCKET",
 	}
 
 	for f, _ := range fingerprints {
@@ -217,6 +218,7 @@ func (s *Http) DNS() {
 			"uservoice.com",
 			"surge.sh",
 			"mashery.com",
+			"bitbucket.io",
 		}
 
 		for _, cn := range cnames {
