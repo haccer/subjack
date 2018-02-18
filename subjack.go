@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net"
 	"net/http"
 	"os"
@@ -26,7 +27,7 @@ var (
 )
 
 type Http struct {
-	Url string
+	Url, Num string
 }
 
 func getDomains(path string) (lines []string, Error error) {
@@ -142,23 +143,51 @@ func Identify(url string) (service string) {
 	return service
 }
 
-func Detect(url string) {
+func RandChar() string {
+	chars := []string{
+		"ｦ", "ｧ", "ｨ", "ｩ", "ｪ",
+		"ｫ", "ｬ", "ｭ", "ｮ", "ｯ",
+		"ｱ", "ｲ", "ｳ", "ｴ", "ｵ",
+		"ｶ", "ｷ", "ｸ", "ｹ", "ｺ",
+		"ｻ", "ｼ", "ｽ", "ｾ", "ｿ",
+		"ﾀ", "ﾁ", "ﾂ", "ﾃ", "ﾄ",
+		"ﾅ", "ﾆ", "ﾇ", "ﾈ", "ﾉ",
+		"ﾊ", "ﾋ", "ﾌ", "ﾍ", "ﾎ",
+		"ﾏ", "ﾐ", "ﾑ", "ﾒ", "ﾓ",
+		"ﾔ", "ﾕ", "ﾖ", "ﾗ", "ﾘ",
+		"ﾙ", "ﾚ", "ﾛ", "ﾜ", "ﾝ",
+	}
+
+	rand.Seed(time.Now().Unix())
+	num := rand.Int() % len(chars)
+
+	return chars[num]
+}
+
+func Detect(url, num string) {
 	service := Identify(url)
+
+	// Clears previous line -- needs to be optimized in the future.
+	fmt.Printf("\r%s", strings.Repeat(" ", 100))
 
 	if service != "" {
 		result := fmt.Sprintf("[%s] %s\n", service, url)
 
-		fmt.Printf(result)
+		fmt.Printf("\r%s", result)
 
 		if *Output != "" {
 			write(result)
 		}
+	} else {
+		fmt.Printf("\r")
 	}
+
+	fmt.Printf("\r[ \u001b[34m%s\u001b[0m Domains %s - Last Request to %s ]", RandChar(), num, url)
 }
 
 func (s *Http) DNS() {
 	if *Strict {
-		Detect(s.Url)
+		Detect(s.Url, s.Num)
 	} else {
 		cname, err := net.LookupCNAME(s.Url)
 		if err != nil {
@@ -192,7 +221,7 @@ func (s *Http) DNS() {
 
 		for _, cn := range cnames {
 			if strings.Contains(cname, cn) {
-				Detect(s.Url)
+				Detect(s.Url, s.Num)
 			}
 		}
 	}
@@ -218,12 +247,18 @@ func Process() {
 	}
 
 	for i := 0; i < len(list); i++ {
-		urls <- &Http{Url: list[i]}
+		//TODO - Progress bar. Never increments in order cuz concurrency.
+		//Progress := fmt.Sprintf("%d/%d", i+1, len(list))
+		Progress := fmt.Sprintf("%d", len(list))
+		urls <- &Http{Url: list[i], Num: Progress}
 	}
 
 	close(urls)
 
 	wg.Wait()
+
+	fmt.Printf("\r%s", strings.Repeat(" ", 100))
+	fmt.Printf("\rTask completed.\n")
 }
 
 func main() {
