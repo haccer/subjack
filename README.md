@@ -40,9 +40,14 @@ Currently checks for:
 - WordPress  
 - WP Engine
 
+<!--
 ## Screenshots
 <img src="https://i.imgur.com/xfjSuwW.jpg" />
 <img src="https://i.imgur.com/2bZF0Ge.png" />
+-->
+
+## In Action
+<img src="https://i.imgur.com/FkpJduu.gifv" />
 
 ## Practical Use
 
