@@ -23,6 +23,7 @@ You need have [Go](https://golang.org/) installed. Full details of installation 
 Currently checks for:
 - Amazon S3 Bucket
 - Amazon Cloudfront
+- Bitbucket
 - Cargo
 - Fastly
 - FeedPress 
