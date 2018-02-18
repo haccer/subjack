@@ -5,7 +5,7 @@
 subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a list of subdomains concurrently and identify ones that are able to be hijacked. With Go's speed and efficiency, this tool really stands out when it comes to mass-testing. Always double check the results manually to rule out false positives. 
 
 
-![https://cody.su/img/subjack1.gif](https://cody.su/img/subjack1.gif)
+![https://cody.su/img/subjack1.gif](https://github.com/haccer/haccer.github.io/blob/master/img/subjack1.gif)
 
 ## Installing
 
