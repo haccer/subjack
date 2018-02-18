@@ -182,7 +182,7 @@ func Detect(url, num string) {
 		fmt.Printf("\r")
 	}
 
-	fmt.Printf("\r[ \u001b[34m%s\u001b[0m Domains %s - Last Request to %s ]", RandChar(), num, url)
+	fmt.Printf("\r[ \u001b[34m%s\u001b[0m Domains \001b[31m%s\u001b[0m - Last Request to %s ]", RandChar(), num, url)
 }
 
 func (s *Http) DNS() {
