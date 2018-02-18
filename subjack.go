@@ -107,21 +107,21 @@ func Identify(url string) (service string) {
 	service = ""
 
 	fingerprints := map[string]string{
-		"ERROR: The request could not be satisfied":                                                                                 "CLOUDFRONT",
-		"Fastly error: unknown domain":                                                                                              "FASTLY",
-		"There isn't a Github Pages site here.":                                                                                     "GITHUB",
-		"herokucdn.com/error-pages/no-such-app.html":                                                                                "HEROKU",
-		"The gods are wise, but do not know of the site which you seek.":                                                            "PANTHEON",
-		"Whatever you were looking for doesn't currently exist at this address.":                                                    "TUMBLR",
-		"Do you want to register":                                                                                                   "WORDPRESS",
-		"Sorry, We Couldn't Find That Page":                                                                                         "DESK",
-		"Help Center Closed":                                                                                                        "ZENDESK",
-		"Oops - We didn't find your site.":                                                                                          "TEAMWORK",
-		"We could not find what you're looking for.":                                                                                "HELPJUICE",
-		"No settings were found for this company:":                                                                                  "HELPSCOUT",
-		"The specified bucket does not exist":                                                                                       "S3 BUCKET",
-		"The thing you were looking for is no longer here, or never was":                                                            "GHOST",
-		"If you're moving your domain away from Cargo you must make this configuration through your registrar's DNS control panel.": "CARGO",
+		"ERROR: The request could not be satisfied":                                                              "CLOUDFRONT",
+		"Fastly error: unknown domain":                                                                           "FASTLY",
+		"There isn't a Github Pages site here.":                                                                  "GITHUB",
+		"herokucdn.com/error-pages/no-such-app.html":                                                             "HEROKU",
+		"The gods are wise, but do not know of the site which you seek.":                                         "PANTHEON",
+		"Whatever you were looking for doesn't currently exist at this address.":                                 "TUMBLR",
+		"Do you want to register":                                                                                "WORDPRESS",
+		"Sorry, We Couldn't Find That Page":                                                                      "DESK",
+		"Help Center Closed":                                                                                     "ZENDESK",
+		"Oops - We didn't find your site.":                                                                       "TEAMWORK",
+		"We could not find what you're looking for.":                                                             "HELPJUICE",
+		"No settings were found for this company:":                                                               "HELPSCOUT",
+		"The specified bucket does not exist":                                                                    "S3 BUCKET",
+		"The thing you were looking for is no longer here, or never was":                                         "GHOST",
+		"If you're moving your domain away from Cargo you must make this configuration through your registrar":   "CARGO",
 		"The feed has not been found.":                                                                           "FEEDPRESS",
 		"May be this is still fresh!":                                                                            "FRESHDESK",
 		"Sorry, this shop is currently unavailable.":                                                             "SHOPIFY",
@@ -129,6 +129,7 @@ func Identify(url string) (service string) {
 		"This domain is successfully pointed at WP Engine, but is not configured for an account on our platform": "WPENGINE",
 		"This UserVoice subdomain is currently available!":                                                       "USERVOICE",
 		"project not found":                                                                                      "SURGE",
+		"Unrecognized domain <strong>":                                                                           "MASHERY",
 	}
 
 	for f, _ := range fingerprints {
@@ -186,6 +187,7 @@ func (s *Http) DNS() {
 			"statuspage.io",
 			"uservoice.com",
 			"surge.sh",
+			"mashery.com",
 		}
 
 		for _, cn := range cnames {
