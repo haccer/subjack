@@ -8,7 +8,7 @@ subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a li
 
 You need have [Go](https://golang.org/) installed. Full details of installation and set up can be found [here](https://golang.org/doc/install). 
 
-`go build subjack.go`
+`go get github.com/haccer/subjack`
 
 ## How To Use:
 
