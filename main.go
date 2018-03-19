@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"net"
 	"net/http"
 	"os"
@@ -132,6 +131,7 @@ func Identify(url string) (service string) {
 		"project not found":                                                                                      "SURGE",
 		"Unrecognized domain <strong>":                                                                           "MASHERY",
 		"Repository not found":                                                                                   "BITBUCKET",
+		"The requested URL was not found on this server.":                                                        "UNBOUNCE",
 	}
 
 	for f, _ := range fingerprints {
@@ -142,27 +142,6 @@ func Identify(url string) (service string) {
 	}
 
 	return service
-}
-
-func RandChar() string {
-	chars := []string{
-		"ｦ", "ｧ", "ｨ", "ｩ", "ｪ",
-		"ｫ", "ｬ", "ｭ", "ｮ", "ｯ",
-		"ｱ", "ｲ", "ｳ", "ｴ", "ｵ",
-		"ｶ", "ｷ", "ｸ", "ｹ", "ｺ",
-		"ｻ", "ｼ", "ｽ", "ｾ", "ｿ",
-		"ﾀ", "ﾁ", "ﾂ", "ﾃ", "ﾄ",
-		"ﾅ", "ﾆ", "ﾇ", "ﾈ", "ﾉ",
-		"ﾊ", "ﾋ", "ﾌ", "ﾍ", "ﾎ",
-		"ﾏ", "ﾐ", "ﾑ", "ﾒ", "ﾓ",
-		"ﾔ", "ﾕ", "ﾖ", "ﾗ", "ﾘ",
-		"ﾙ", "ﾚ", "ﾛ", "ﾜ", "ﾝ",
-	}
-
-	rand.Seed(time.Now().Unix())
-	num := rand.Int() % len(chars)
-
-	return chars[num]
 }
 
 func Detect(url, num string) {
@@ -183,7 +162,7 @@ func Detect(url, num string) {
 		fmt.Printf("\r")
 	}
 
-	fmt.Printf("\r[ \u001b[34m%s\u001b[0m Domains \001b[31m%s\u001b[0m - Last Request to %s ]", RandChar(), num, url)
+	fmt.Printf("\r[ Domains \001b[31m%s\u001b[0m - Last Request to %s ]", num, url)
 }
 
 func (s *Http) DNS() {
@@ -219,6 +198,7 @@ func (s *Http) DNS() {
 			"surge.sh",
 			"mashery.com",
 			"bitbucket.io",
+			"unbouncepages.com",
 		}
 
 		for _, cn := range cnames {
