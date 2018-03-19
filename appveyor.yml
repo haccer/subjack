@@ -15,4 +15,4 @@ install:
 build: false
 
 test_script:
-  - go get github.com/haccer/subjack
+  - go build github.com/haccer/subjack
