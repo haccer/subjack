@@ -37,6 +37,7 @@ Currently checks for:
 - Shopify
 - Surge 
 - Tumblr
+- Unbounce
 - UserVoice
 - WordPress  
 - WP Engine
@@ -71,6 +72,9 @@ dev2.twitter.com
 **Q:** I ran my scan and nothing happened. What does this mean?
 
 **A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
+
+## References
+- [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
 
 ## Contact
 
