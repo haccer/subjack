@@ -11,6 +11,8 @@ install:
   - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
   - go version
   - go env
+  
+build: false
 
 test_script:
   - go get github.com/haccer/subjack
