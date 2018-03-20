@@ -39,8 +39,9 @@ Currently checks for:
 - Tumblr
 - Unbounce
 - UserVoice
-- WordPress  
-- WP Engine
+- WordPress
+
+Comprehensive list of domains that can be taken over: [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
 
 <!--
 ## Screenshots
@@ -72,9 +73,6 @@ dev2.twitter.com
 **Q:** I ran my scan and nothing happened. What does this mean?
 
 **A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
-
-## References
-- [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
 
 ## Contact
 
