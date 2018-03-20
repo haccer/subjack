@@ -41,7 +41,7 @@ Currently checks for:
 - UserVoice
 - WordPress
 
-Comprehensive list of domains that can be taken over: [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
+**Reference:** Comprehensive list of domains that can be taken over: [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
 
 <!--
 ## Screenshots
