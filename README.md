@@ -13,7 +13,7 @@ You need have [Go](https://golang.org/) installed. Full details of installation 
 ## How To Use:
 
 `./subjack -w domains.txt -t 100 -timeout 30 -o results.txt -https`
-- `-w domains.txt` is your list of subdomains. I recommend using `cname.sh` (included in repository) to sift through your subdomain list for ones that have CNAME records attached and use that list to optimize and speed up testing.
+- `-w domains.txt` is your list of subdomains.
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
 - `-o results.txt` where to save results to (Optional).
