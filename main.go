@@ -26,7 +26,7 @@ var (
 )
 
 type Http struct {
-	Url, Num string
+	Url string
 }
 
 func getDomains(path string) (lines []string, Error error) {
@@ -153,30 +153,23 @@ func Identify(url string) (service string) {
 	return service
 }
 
-func Detect(url, num string) {
+func Detect(url string) {
 	service := Identify(url)
-
-	// Clears previous line -- needs to be optimized in the future.
-	fmt.Printf("\r%s", strings.Repeat(" ", 100))
 
 	if service != "" {
 		result := fmt.Sprintf("[%s] %s\n", service, url)
 
-		fmt.Printf("\r%s", result)
+		fmt.Printf(result)
 
 		if *Output != "" {
 			write(result)
 		}
-	} else {
-		fmt.Printf("\r")
 	}
-
-	fmt.Printf("\r[ Domains \001b[31m%s\u001b[0m - Last Request to %s ]", num, url)
 }
 
 func (s *Http) DNS() {
 	if *Strict {
-		Detect(s.Url, s.Num)
+		Detect(s.Url)
 	} else {
 		cname, err := net.LookupCNAME(s.Url)
 		if err != nil {
@@ -211,7 +204,7 @@ func (s *Http) DNS() {
 
 		for _, cn := range cnames {
 			if strings.Contains(cname, cn) {
-				Detect(s.Url, s.Num)
+				Detect(s.Url)
 			}
 		}
 	}
@@ -237,16 +230,12 @@ func Process() {
 	}
 
 	for i := 0; i < len(list); i++ {
-		Progress := fmt.Sprintf("%d", len(list))
-		urls <- &Http{Url: list[i], Num: Progress}
+		urls <- &Http{Url: list[i]}
 	}
 
 	close(urls)
 
 	wg.Wait()
-
-	fmt.Printf("\r%s", strings.Repeat(" ", 100))
-	fmt.Printf("\rTask completed.\n")
 }
 
 func main() {
