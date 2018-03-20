@@ -52,6 +52,9 @@ dev2.twitter.com
 
 **A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
 
+## Reference
+- [https://cody.su/blog/Hostile-Subdomain-Takeovers/](https://cody.su/blog/Hostile-Subdomain-Takeovers/)
+
 ## Contact
 
 Shout me out on Twitter: [@now](https://twitter.com/now)
