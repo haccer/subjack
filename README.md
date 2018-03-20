@@ -6,8 +6,6 @@ subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a li
 
 ## Installing
 
-You need have [Go](https://golang.org/) installed. Full details of installation and set up can be found [here](https://golang.org/doc/install). 
-
 `go get github.com/haccer/subjack`
 
 ## How To Use:
@@ -21,27 +19,7 @@ You need have [Go](https://golang.org/) installed. Full details of installation 
 - `-strict` sends HTTP requests to every URL (Optional).
 
 Currently checks for:
-- Amazon S3 Bucket
-- Amazon Cloudfront
-- Bitbucket
-- Cargo
-- Fastly
-- FeedPress 
-- Ghost
-- Github 
-- Helpjuice 
-- Help Scout
-- Heroku 
-- Mashery
-- Pantheon.io
-- Shopify
-- Surge 
-- Tumblr
-- Unbounce
-- UserVoice
-- WordPress
-
-**Reference:** Comprehensive list of domains that can be taken over: [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
+> Amazon S3 Bucket, Amazon Cloudfront, Bitbucket, Cargo, Fastly, FeedPress, Ghost, Github, Helpjuice, Help Scout, Heroku, Mashery, Pantheon.io, Shopify, Surge, Tumblr, Unbounce, UserVoice, WordPress
 
 <!--
 ## Screenshots
