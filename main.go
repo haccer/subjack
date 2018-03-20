@@ -54,7 +54,8 @@ func write(result string) {
 
 	defer f.Close()
 
-	if _, err = f.WriteString(result); err != nil {
+	_, err = f.WriteString(result)
+	if err != nil {
 		log.Fatalln(err)
 	}
 }
@@ -106,38 +107,46 @@ func Identify(url string) (service string) {
 
 	service = ""
 
+	// First round
 	fingerprints := map[string]string{
-		"ERROR: The request could not be satisfied":                                                              "CLOUDFRONT",
-		"Fastly error: unknown domain":                                                                           "FASTLY",
-		"There isn't a Github Pages site here.":                                                                  "GITHUB",
-		"herokucdn.com/error-pages/no-such-app.html":                                                             "HEROKU",
-		"The gods are wise, but do not know of the site which you seek.":                                         "PANTHEON",
-		"Whatever you were looking for doesn't currently exist at this address.":                                 "TUMBLR",
-		"Do you want to register":                                                                                "WORDPRESS",
-		"Sorry, We Couldn't Find That Page":                                                                      "DESK",
-		"Help Center Closed":                                                                                     "ZENDESK",
-		"Oops - We didn't find your site.":                                                                       "TEAMWORK",
-		"We could not find what you're looking for.":                                                             "HELPJUICE",
-		"No settings were found for this company:":                                                               "HELPSCOUT",
-		"The specified bucket does not exist":                                                                    "S3 BUCKET",
-		"The thing you were looking for is no longer here, or never was":                                         "GHOST",
-		"If you're moving your domain away from Cargo you must make this configuration through your registrar":   "CARGO",
-		"The feed has not been found.":                                                                           "FEEDPRESS",
-		"May be this is still fresh!":                                                                            "FRESHDESK",
-		"Sorry, this shop is currently unavailable.":                                                             "SHOPIFY",
-		"You are being <a href=\"https://www.statuspage.io\">redirected":                                         "STATUSPAGE",
-		"This domain is successfully pointed at WP Engine, but is not configured for an account on our platform": "WPENGINE",
-		"This UserVoice subdomain is currently available!":                                                       "USERVOICE",
-		"project not found":                                                                                      "SURGE",
-		"Unrecognized domain <strong>":                                                                           "MASHERY",
-		"Repository not found":                                                                                   "BITBUCKET",
-		"The requested URL was not found on this server.":                                                        "UNBOUNCE",
+		"ERROR: The request could not be satisfied":                              "CLOUDFRONT",
+		"Fastly error: unknown domain":                                           "FASTLY",
+		"There isn't a Github Pages site here.":                                  "GITHUB",
+		"herokucdn.com/error-pages/no-such-app.html":                             "HEROKU",
+		"The gods are wise, but do not know of the site which you seek.":         "PANTHEON",
+		"Whatever you were looking for doesn't currently exist at this address.": "TUMBLR",
+		"Do you want to register":                                                "WORDPRESS",
+		"Sorry, We Couldn't Find That Page":                                      "DESK",
+		"Help Center Closed":                                                     "ZENDESK",
+		"Oops - We didn't find your site.":                                       "TEAMWORK",
+		"We could not find what you're looking for.":                             "HELPJUICE",
+		"No settings were found for this company:":                               "HELPSCOUT",
+		"The specified bucket does not exist":                                    "S3 BUCKET",
+		"The thing you were looking for is no longer here, or never was":         "GHOST",
+		"<title>404 &mdash; File not found</title>":                              "CARGO",
+		"The feed has not been found.":                                           "FEEDPRESS",
+		"May be this is still fresh!":                                            "FRESHDESK",
+		"Sorry, this shop is currently unavailable.":                             "SHOPIFY",
+		"You are being <a href=\"https://www.statuspage.io\">redirected":         "STATUSPAGE",
+		"This UserVoice subdomain is currently available!":                       "USERVOICE",
+		"project not found":                                                      "SURGE",
+		"Unrecognized domain <strong>":                                           "MASHERY",
+		"Repository not found":                                                   "BITBUCKET",
+		"The requested URL was not found on this server.":                        "UNBOUNCE",
 	}
 
 	for f, _ := range fingerprints {
 		if bytes.Contains(body, []byte(f)) {
 			service = fingerprints[f]
 			break
+		}
+	}
+
+	// 2nd round
+	switch service {
+	case "CARGO":
+		if !bytes.Contains(body, []byte("cargocollective.com")) {
+			service = ""
 		}
 	}
 
@@ -181,7 +190,6 @@ func (s *Http) DNS() {
 			"wordpress.com",
 			"pantheonsite.io",
 			"domains.tumblr.com",
-			"wpengine.com",
 			"desk.com",
 			"zendesk.com",
 			"github.io",
