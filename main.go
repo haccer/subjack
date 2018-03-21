@@ -102,6 +102,14 @@ func get(url string) (body []byte) {
 	return body
 }
 
+func https(url string) (body []byte) {
+	ht := strings.Split(url, "://")
+	new_url := fmt.Sprintf("https://%s", ht[1])
+	body = get(new_url)
+
+	return body
+}
+
 func Identify(url string) (service string) {
 	body := get(url)
 
@@ -147,6 +155,18 @@ func Identify(url string) (service string) {
 	case "CARGO":
 		if !bytes.Contains(body, []byte("cargocollective.com")) {
 			service = ""
+		}
+	case "CLOUDFRONT":
+		if !bytes.Contains(body, []byte("Bad request.")) {
+			service = ""
+		} else {
+			// Ruling out false positives.
+			if !*Https {
+				bd := https(url)
+				if bytes.Contains(bd, []byte("<Code>AccessDenied</Code>")) {
+					service = ""
+				}
+			}
 		}
 	}
 
