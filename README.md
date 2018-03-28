@@ -18,8 +18,8 @@ subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a li
 - `-https` enforces https requests which may return a different set of results and increase accuracy (Optional).
 - `-strict` sends HTTP requests to every URL (Optional).
 
-Currently checks for (43 Services):
-> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, Freshdesk, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, Kajabi, MailerLite, Mashery, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, Unbounce, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
+Currently checks for (42 Services):
+> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, Kajabi, MailerLite, Mashery, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, Unbounce, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
 
 <!--
 ## Screenshots
