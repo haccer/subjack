@@ -103,8 +103,7 @@ func get(url string) (body []byte) {
 }
 
 func https(url string) (body []byte) {
-	ht := strings.Split(url, "://")
-	new_url := fmt.Sprintf("https://%s", ht[1])
+	new_url := fmt.Sprintf("https://%s", url)
 	body = get(new_url)
 
 	return body
