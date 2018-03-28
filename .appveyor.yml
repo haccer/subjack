@@ -15,4 +15,5 @@ install:
 build: false
 
 test_script:
+  - go get github.com/caffix/amass
   - go build github.com/haccer/subjack
