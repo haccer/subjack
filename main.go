@@ -8,25 +8,35 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/caffix/amass/amass"
 )
 
 var (
+	Domain   = flag.String("d", "", "Use amass to enumerate DNS of domain and check subdomains.")
 	Wordlist = flag.String("w", "", "Path to wordlist.")
 	Threads  = flag.Int("t", 10, "Number of concurrent threads (Default: 10).")
 	Timeout  = flag.Int("timeout", 10, "Seconds to wait before connection timeout (Default: 10).")
 	Output   = flag.String("o", "", "Output file to write results to.")
 	Https    = flag.Bool("https", false, "Force HTTPS connections (May increase accuracy. Default: http://).")
 	Strict   = flag.Bool("strict", false, "Find those hidden gems by sending HTTP requests to ever URL. (Default: HTTP requests are only sent to URLs with cloud CNAMEs).")
+	Alts     = flag.Bool("alts", false, "Use alts with amass (Disabled by default).")
 )
 
 type Http struct {
 	Url string
+}
+
+type Enum struct {
+	Results chan *amass.AmassRequest
+	Finish  chan struct{}
 }
 
 func getDomains(path string) (lines []string, Error error) {
@@ -325,6 +335,38 @@ func Process() {
 	wg.Wait()
 }
 
+func enumOut(e *Enum) {
+	for {
+		select {
+		case result := <-e.Results:
+			url := &Http{Url: result.Name}
+			url.DNS()
+		case <-e.Finish:
+			break
+		}
+	}
+}
+
+func enumerate() {
+	output := make(chan *amass.AmassRequest, 100)
+	finish := make(chan struct{})
+
+	go enumOut(&Enum{
+		Results: output,
+		Finish:  finish,
+	})
+
+	rand.Seed(time.Now().UTC().UnixNano())
+	config := amass.CustomConfig(&amass.AmassConfig{
+		Output:      output,
+		Recursive:   false,
+		Alterations: *Alts,
+	})
+
+	config.AddDomains([]string{*Domain})
+	amass.StartEnumeration(config)
+}
+
 func main() {
 	flag.Parse()
 
@@ -338,5 +380,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	Process()
+	if *Domain != "" {
+		if *Wordlist != "" {
+			fmt.Println("[-] Please use -d or -w (Only one).")
+			os.Exit(1)
+		}
+
+		enumerate()
+	} else {
+		Process()
+	}
 }
