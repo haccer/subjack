@@ -235,9 +235,9 @@ func detect(url, output string, ssl bool, timeout int) {
 	service := identify(url, ssl, timeout)
 
 	if service != "" {
-		result := fmt.Sprintf("[%s] %s", service, url)
+		result := fmt.Sprintf("[%s] %s\n", service, url)
 
-		fmt.Println(result)
+		fmt.Printf(result)
 
 		if output != "" {
 			write(result, output)
@@ -315,7 +315,8 @@ func enumOut(e *Enum, a *Options) {
 		select {
 		case result := <-e.Results:
 			if a.SaveSubs != "" {
-				write(result.Name, a.SaveSubs)
+				saveResult := fmt.Sprintf("%s\n", result.Name)
+				write(saveResult, a.SaveSubs)
 			}
 
 			url := &Subdomain{Url: result.Name}
