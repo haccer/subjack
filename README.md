@@ -2,18 +2,26 @@
 
 [![Build Status](https://api.travis-ci.org/haccer/subjack.svg?branch=master)](https://travis-ci.org/haccer/subjack) [![Build status](https://ci.appveyor.com/api/projects/status/dm8f2yyjcbn3j1cm?svg=true&passingText=Windows%20-%20OK&failingText=Windows%20-%20failed&pendingText=Windows%20-%20pending)](https://ci.appveyor.com/project/haccer/subjack) [![Go Report Card](https://goreportcard.com/badge/github.com/haccer/subjack)](https://goreportcard.com/report/github.com/haccer/subjack) [![GitHub license](https://img.shields.io/github/license/haccer/subjack.svg)](https://github.com/haccer/subjack/blob/master/LICENSE)
 
-subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a list of subdomains concurrently and identify ones that are able to be hijacked. With Go's speed and efficiency, this tool really stands out when it comes to mass-testing. Always double check the results manually to rule out false positives.
+Subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a list of subdomains concurrently and identify ones that are able to be hijacked. With Go's speed and efficiency, this tool really stands out when it comes to mass-testing. Always double check the results manually to rule out false positives.
 
 **New:**
-Subjack now has a subdomain discovery option that uses [Jeff Foley](https://twitter.com/@jeff_foley)'s [amass](https://github.com/caffix/amass) to discover subdomains and test them immediately.
+> Subjack now has a subdomain discovery option that uses [Jeff Foley](https://twitter.com/@jeff_foley)'s [amass](https://github.com/caffix/amass) to discover subdomains and test them immediately.
+
+Subjack uses amass integration to:
+- enumerate subdomains of a specified domain or from a list of domains.
+- brute force subdomains with a wordlist.
+- enumerate subdomains recursively and/or with alterations.
+- save subdomains enumerated with amass integration.
 
 ## Installing
+
+Requires [Go](https://golang.org/dl/) >= 1.10.
 
 `go get -u github.com/haccer/subjack`
 
 ## How To Use:
 
-Example: `./subjack -w domains.txt -t 100 -timeout 30 -o results.txt -https`
+Example: `./subjack -w domains.txt -t 100 -timeout 30 -o results.txt -ssl`
 
 Options:
 - `-d domain.com` is a domain you want to gather subdomains for with [amass](https://github.com/caffix/amass).
@@ -21,9 +29,13 @@ Options:
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
 - `-o results.txt` where to save results to (Optional).
-- `-https` enforces https requests which may return a different set of results and increase accuracy (Optional).
-- `-strict` sends HTTP requests to every URL (Optional).
-- `-alts` Use alts with amass(-d option) (Optional).
+- `-ssl` enforces HTTPS requests which may return a different set of results and increase accuracy (Optional).
+- `-a` skips CNAME check and sends requests to every URL (Optional).
+- `-save subdomains.txt` is to save subdomains enumerated with amass (Use with -d or -dL).
+- `-dL domains.txt` is a list of domains to enumerate subdomains using amass.
+- `-brute` enables subdomain brute forcing (Use with -d or -dL).
+- `-r` enables recursive subdomain brute forcing (Use with -d or -dL).
+- `-alts` enables subdomain alterations (Use with -d or -dL).
 
 Currently checks for (42 Services):
 > Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, Kajabi, MailerLite, Mashery, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, Unbounce, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
@@ -59,8 +71,12 @@ dev2.twitter.com
 
 **A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
 
-## Reference
+## References
+Extra information about Hostile Subdomain Takeovers:
+
 - [https://cody.su/blog/Hostile-Subdomain-Takeovers/](https://cody.su/blog/Hostile-Subdomain-Takeovers/)
+- [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
+- [https://labs.detectify.com/2014/10/21/hostile-subdomain-takeover-using-herokugithubdesk-more/](https://labs.detectify.com/2014/10/21/hostile-subdomain-takeover-using-herokugithubdesk-more/)
 
 ## Contact
 
