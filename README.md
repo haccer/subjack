@@ -28,9 +28,9 @@ Options:
 - `-w domains.txt` is your list of subdomains.
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
-- `-o results.txt` where to save results to (Optional).
-- `-ssl` enforces HTTPS requests which may return a different set of results and increase accuracy (Optional).
-- `-a` skips CNAME check and sends requests to every URL (Optional).
+- `-o results.txt` where to save results to.
+- `-ssl` enforces HTTPS requests which may return a different set of results and increase accuracy.
+- `-a` skips CNAME check and sends requests to every URL.
 - `-save subdomains.txt` is to save subdomains enumerated with amass (Use with -d or -dL).
 - `-dL domains.txt` is a list of domains to enumerate subdomains using amass.
 - `-brute` enables subdomain brute forcing (Use with -d or -dL).
