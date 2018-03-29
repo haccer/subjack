@@ -21,7 +21,10 @@ Requires [Go](https://golang.org/dl/) >= 1.10.
 
 ## How To Use:
 
-Example: `./subjack -w domains.txt -t 100 -timeout 30 -o results.txt -ssl`
+Examples: 
+- `./subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl`
+- `./subjack -d example.com -brute -w subdomain_wordlist.txt`
+- `./subjack -dL domains.txt -alts -save subdomains.txt -o results.txt`
 
 Options:
 - `-d domain.com` is a domain you want to gather subdomains for with [amass](https://github.com/caffix/amass).
