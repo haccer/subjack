@@ -19,18 +19,22 @@ import (
 	"github.com/caffix/amass/amass"
 )
 
-var (
-	Domain   = flag.String("d", "", "Use amass to enumerate DNS of domain and check subdomains.")
-	Wordlist = flag.String("w", "", "Path to wordlist.")
-	Threads  = flag.Int("t", 10, "Number of concurrent threads (Default: 10).")
-	Timeout  = flag.Int("timeout", 10, "Seconds to wait before connection timeout (Default: 10).")
-	Output   = flag.String("o", "", "Output file to write results to.")
-	Https    = flag.Bool("https", false, "Force HTTPS connections (May increase accuracy. Default: http://).")
-	Strict   = flag.Bool("strict", false, "Find those hidden gems by sending HTTP requests to ever URL. (Default: HTTP requests are only sent to URLs with cloud CNAMEs).")
-	Alts     = flag.Bool("alts", false, "Use alts with amass (Disabled by default).")
-)
+type Options struct {
+	Domain     string
+	Wordlist   string
+	Threads    int
+	Timeout    int
+	Output     string
+	Ssl        bool
+	All        bool
+	SaveSubs   string
+	DomainList string
+	Brute      bool
+	Recursive  bool
+	Alts       bool
+}
 
-type Http struct {
+type Subdomain struct {
 	Url string
 }
 
@@ -39,7 +43,7 @@ type Enum struct {
 	Finish  chan struct{}
 }
 
-func getDomains(path string) (lines []string, Error error) {
+func open(path string) (lines []string, Error error) {
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatalln(err)
@@ -56,8 +60,8 @@ func getDomains(path string) (lines []string, Error error) {
 	return lines, scanner.Err()
 }
 
-func write(result string) {
-	f, err := os.OpenFile(*Output, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0600)
+func write(result, output string) {
+	f, err := os.OpenFile(output, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0600)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -70,8 +74,8 @@ func write(result string) {
 	}
 }
 
-func Site(url string) (site string) {
-	if *Https {
+func site(url string, ssl bool) (site string) {
+	if ssl {
 		site = fmt.Sprintf("https://%s", url)
 	} else {
 		site = fmt.Sprintf("http://%s", url)
@@ -80,17 +84,17 @@ func Site(url string) (site string) {
 	return site
 }
 
-func get(url string) (body []byte) {
+func get(url string, ssl bool, timeout int) (body []byte) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{
 		Transport: tr,
-		Timeout:   time.Duration(*Timeout) * time.Second,
+		Timeout:   time.Duration(timeout) * time.Second,
 	}
 
-	req, err := http.NewRequest("GET", Site(url), nil)
+	req, err := http.NewRequest("GET", site(url, ssl), nil)
 	if err != nil {
 		return
 	}
@@ -112,15 +116,15 @@ func get(url string) (body []byte) {
 	return body
 }
 
-func https(url string) (body []byte) {
-	new_url := fmt.Sprintf("https://%s", url)
-	body = get(new_url)
+func https(url string, ssl bool, timeout int) (body []byte) {
+	newUrl := fmt.Sprintf("https://%s", url)
+	body = get(newUrl, ssl, timeout)
 
 	return body
 }
 
-func Identify(url string) (service string) {
-	body := get(url)
+func identify(url string, ssl bool, timeout int) (service string) {
+	body := get(url, ssl, timeout)
 
 	service = ""
 
@@ -179,7 +183,7 @@ func Identify(url string) (service string) {
 		}
 	}
 
-	// 2nd round
+	// 2nd round - Ruling out false positives.
 	switch service {
 	case "CARGO":
 		if !bytes.Contains(body, []byte("cargocollective.com")) {
@@ -189,9 +193,8 @@ func Identify(url string) (service string) {
 		if !bytes.Contains(body, []byte("Bad request.")) {
 			service = ""
 		} else {
-			// Ruling out false positives.
-			if !*Https {
-				bd := https(url)
+			if ssl {
+				bd := https(url, ssl, timeout)
 				if bytes.Contains(bd, []byte("<Code>AccessDenied</Code>")) {
 					service = ""
 				}
@@ -228,23 +231,23 @@ func Identify(url string) (service string) {
 	return service
 }
 
-func Detect(url string) {
-	service := Identify(url)
+func detect(url, output string, ssl bool, timeout int) {
+	service := identify(url, ssl, timeout)
 
 	if service != "" {
-		result := fmt.Sprintf("[%s] %s\n", service, url)
+		result := fmt.Sprintf("[%s] %s", service, url)
 
-		fmt.Printf(result)
+		fmt.Println(result)
 
-		if *Output != "" {
-			write(result)
+		if output != "" {
+			write(result, output)
 		}
 	}
 }
 
-func (s *Http) DNS() {
-	if *Strict {
-		Detect(s.Url)
+func (s *Subdomain) DNS(a *Options) {
+	if a.All {
+		detect(s.Url, a.Output, a.Ssl, a.Timeout)
 	} else {
 		cname, err := net.LookupCNAME(s.Url)
 		if err != nil {
@@ -301,25 +304,81 @@ func (s *Http) DNS() {
 
 		for _, cn := range cnames {
 			if strings.Contains(cname, cn) {
-				Detect(s.Url)
+				detect(s.Url, a.Output, a.Ssl, a.Timeout)
 			}
 		}
 	}
 }
 
-func Process() {
-	urls := make(chan *Http, *Threads*10)
-	list, err := getDomains(*Wordlist)
+func enumOut(e *Enum, a *Options) {
+	for {
+		select {
+		case result := <-e.Results:
+			if a.SaveSubs != "" {
+				write(result.Name, a.SaveSubs)
+			}
+
+			url := &Subdomain{Url: result.Name}
+			url.DNS(a)
+		case <-e.Finish:
+			break
+		}
+	}
+}
+
+func enumerate(a *Options) {
+	results := make(chan *amass.AmassRequest, a.Threads*10)
+	finish := make(chan struct{})
+	var err error
+
+	go enumOut(&Enum{
+		Results: results,
+		Finish:  finish,
+	}, a)
+
+	var wordlist []string
+	if a.Wordlist != "" {
+		wordlist, err = open(a.Wordlist)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+	rand.Seed(time.Now().UTC().UnixNano())
+	config := amass.CustomConfig(&amass.AmassConfig{
+		Output:       results,
+		Wordlist:     wordlist,
+		BruteForcing: a.Brute,
+		Recursive:    a.Recursive,
+		Alterations:  a.Alts,
+	})
+
+	domains := []string{a.Domain}
+
+	if a.DomainList != "" {
+		domains, err = open(a.DomainList)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+	config.AddDomains(domains)
+	amass.StartEnumeration(config)
+}
+
+func process(a *Options) {
+	urls := make(chan *Subdomain, a.Threads*10)
+	list, err := open(a.Wordlist)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	var wg sync.WaitGroup
-	for i := 0; i < *Threads; i++ {
+	for i := 0; i < a.Threads; i++ {
 		wg.Add(1)
 		go func() {
 			for url := range urls {
-				url.DNS()
+				url.DNS(a)
 			}
 
 			wg.Done()
@@ -327,47 +386,36 @@ func Process() {
 	}
 
 	for i := 0; i < len(list); i++ {
-		urls <- &Http{Url: list[i]}
+		urls <- &Subdomain{Url: list[i]}
 	}
 
 	close(urls)
-
 	wg.Wait()
 }
 
-func enumOut(e *Enum) {
-	for {
-		select {
-		case result := <-e.Results:
-			url := &Http{Url: result.Name}
-			url.DNS()
-		case <-e.Finish:
-			break
-		}
-	}
-}
-
-func enumerate() {
-	output := make(chan *amass.AmassRequest, 100)
-	finish := make(chan struct{})
-
-	go enumOut(&Enum{
-		Results: output,
-		Finish:  finish,
-	})
-
-	rand.Seed(time.Now().UTC().UnixNano())
-	config := amass.CustomConfig(&amass.AmassConfig{
-		Output:      output,
-		Recursive:   false,
-		Alterations: *Alts,
-	})
-
-	config.AddDomains([]string{*Domain})
-	amass.StartEnumeration(config)
+func conflict(msg string) {
+	fmt.Println(msg)
+	os.Exit(1)
 }
 
 func main() {
+	a := Options{}
+
+	flag.StringVar(&a.Domain, "d", "", "Use amass to enumerate DNS and check subdomains.")
+	flag.StringVar(&a.Wordlist, "w", "", "Path to wordlist.")
+	flag.IntVar(&a.Threads, "t", 10, "Number of concurrent threads (Default: 10).")
+	flag.IntVar(&a.Timeout, "timeout", 10, "Seconds to wait before connection timeout (Default: 10).")
+	flag.StringVar(&a.Output, "o", "", "Output file to write results to.")
+	flag.BoolVar(&a.Ssl, "ssl", false, "Force HTTPS connections (May increase accuracy. Default: http://).")
+	flag.BoolVar(&a.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
+
+	// Enumeration options
+	flag.StringVar(&a.SaveSubs, "save", "", "Output file to write subdomains saved with amass to.")
+	flag.StringVar(&a.DomainList, "dL", "", "Path to domains list.")
+	flag.BoolVar(&a.Brute, "brute", false, "Enable subdomain brute forcing.")
+	flag.BoolVar(&a.Recursive, "r", false, "Enable recursive subdomain brute forcing.")
+	flag.BoolVar(&a.Alts, "alts", false, "Enable subdomain alterations.")
+
 	flag.Parse()
 
 	flag.Usage = func() {
@@ -380,14 +428,43 @@ func main() {
 		os.Exit(1)
 	}
 
-	if *Domain != "" {
-		if *Wordlist != "" {
-			fmt.Println("[-] Please use -d or -w (Only one).")
-			os.Exit(1)
+	if a.Domain != "" || a.DomainList != "" {
+		if a.Domain != "" && a.DomainList != "" {
+			conflict("[-] Please use -d or -dL.")
 		}
 
-		enumerate()
+		if a.Wordlist != "" && !a.Brute {
+			conflict("[-] Please enable brute forcing with -w, or use -d alone.")
+		}
+
+		if a.Brute {
+			if a.Wordlist != "" {
+				conflict("[-] Please specify a wordlist to brute force with.")
+			}
+		}
+
+		enumerate(&a)
 	} else {
-		Process()
+		if a.SaveSubs != "" {
+			conflict("[-] Please use -save with -d.")
+		}
+
+		if a.DomainList != "" {
+			conflict("[-] Please use -dL with -d.")
+		}
+
+		if a.Brute {
+			conflict("[-] Please use -brute with -d.")
+		}
+
+		if a.Recursive {
+			conflict("[-] Please use -r with -d.")
+		}
+
+		if a.Alts {
+			conflict("[-] Please use -alts with -d.")
+		}
+
+		process(&a)
 	}
 }
