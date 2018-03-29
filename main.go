@@ -174,6 +174,7 @@ func identify(url string, ssl bool, timeout int) (service string) {
 		"We can't find this <a href=\"https://simplebooklet.com":                                  "SIMPLEBOOKLET",
 		"With GetResponse Landing Pages, lead generation has never been easier":                   "GETRESPONSE",
 		"Looks like you've traveled too far into cyberspace.":                                     "VEND",
+		"is not a registered InCloud YouTrack.": "JETBRAINS",
 	}
 
 	for f, _ := range fingerprints {
@@ -300,6 +301,7 @@ func (s *Subdomain) DNS(a *Options) {
 			"simplebooklet.com",
 			".gr8.com",
 			"vendecommerce.com",
+			"myjetbrains.com",
 		}
 
 		for _, cn := range cnames {
