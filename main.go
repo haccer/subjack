@@ -3,20 +3,18 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"crypto/tls"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net"
-	"net/http"
 	"os"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/caffix/amass/amass"
+	http "github.com/valyala/fasthttp"
 )
 
 type Options struct {
@@ -85,35 +83,14 @@ func site(url string, ssl bool) (site string) {
 }
 
 func get(url string, ssl bool, timeout int) (body []byte) {
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
+	req := http.AcquireRequest()
+	req.SetRequestURI(site(url, ssl))
+	resp := http.AcquireResponse()
 
-	client := &http.Client{
-		Transport: tr,
-		Timeout:   time.Duration(timeout) * time.Second,
-	}
+	client := &http.Client{}
+	client.DoTimeout(req, resp, time.Duration(timeout)*time.Second)
 
-	req, err := http.NewRequest("GET", site(url, ssl), nil)
-	if err != nil {
-		return
-	}
-
-	req.Header.Add("Connection", "close")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-
-	body, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-
-	return body
+	return resp.Body()
 }
 
 func https(url string, ssl bool, timeout int) (body []byte) {
