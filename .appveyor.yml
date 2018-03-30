@@ -16,4 +16,5 @@ build: false
 
 test_script:
   - go get github.com/caffix/amass
+  - go get github.com/valyala/fasthttp
   - go build github.com/haccer/subjack
