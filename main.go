@@ -12,8 +12,11 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/caffix/amass/amass"
+	"github.com/domainr/whois"
+	"github.com/miekg/dns"
 	http "github.com/valyala/fasthttp"
 )
 
@@ -93,6 +96,78 @@ func get(url string, ssl bool, timeout int) (body []byte) {
 	return resp.Body()
 }
 
+func resolve(url string) (cname string) {
+	// We don't need Dig where I come from....
+	cname = ""
+
+	d := new(dns.Msg)
+	d.SetQuestion(fmt.Sprintf("%s.", url), dns.TypeCNAME)
+	// Google gets it everytime
+	ret, err := dns.Exchange(d, "8.8.8.8:53")
+	if err != nil {
+		return
+	}
+
+	for _, a := range ret.Answer {
+		if t, ok := a.(*dns.CNAME); ok {
+			cname = t.Target
+		}
+	}
+
+	return cname
+}
+
+func reverse(s string) string {
+	cc := make([]rune, utf8.RuneCountInString(s))
+	i := len(cc)
+	for _, c := range s {
+		i--
+		cc[i] = c
+	}
+
+	return string(cc)
+}
+
+func domain(url string) string {
+	r := reverse(url)
+	rr := strings.Split(r, ".")
+	rev := fmt.Sprintf("%s.%s", rr[1], rr[2])
+
+	return reverse(rev)
+}
+
+func Whois(url string) (exist bool, dom string) {
+	exist = false
+
+	d := domain(url)
+	req, err := whois.NewRequest(d)
+	if err != nil {
+		return
+	}
+
+	resp, err := whois.DefaultClient.Fetch(req)
+	if err != nil {
+		return
+	}
+
+	// Will probably need to be updated for each TLD.
+	not_found := []string{
+		"Domain not found.",
+		"NOT FOUND",
+		"No match for ",
+		"No entries found ",
+	}
+
+	for _, match := range not_found {
+		if strings.Contains(fmt.Sprintf("%s", resp), match) {
+			exist = true
+			break
+		}
+	}
+
+	return exist, url
+}
+
 func https(url string, ssl bool, timeout int) (body []byte) {
 	newUrl := fmt.Sprintf("https://%s", url)
 	body = get(newUrl, ssl, timeout)
@@ -105,7 +180,39 @@ func identify(url string, ssl bool, timeout int) (service string) {
 
 	service = ""
 
-	// First round
+	// Microsoft Azure check
+
+	azure := []string{
+		".azurewebsites.net",
+		".cloudapp.net",
+		".trafficmanager.net",
+		".blob.core.windows.net",
+	}
+
+	cname := resolve(url)
+
+	// To be later substituted with miekg/dns
+	if _, err := net.LookupHost(url); err != nil {
+		if strings.Contains(fmt.Sprintln(err), "no such host") {
+			for _, az := range azure {
+				if strings.Contains(cname, az) {
+					service = "AZURE"
+					break
+				}
+			}
+
+			// Ayyy, looking for subdomains attached to
+			// domains we could probably register.
+			// No other tool does this o.o [^-^] :D
+
+			dead, url := Whois(cname)
+			if dead {
+				service = fmt.Sprintf("DOMAIN - %s", url[:len(url)-1])
+			}
+		}
+	}
+
+	// First round: Everything else
 	fingerprints := map[string]string{
 		"ERROR: The request could not be satisfied":                                                  "CLOUDFRONT",
 		"Fastly error: unknown domain":                                                               "FASTLY",
@@ -151,8 +258,19 @@ func identify(url string, ssl bool, timeout int) (service string) {
 		"We can't find this <a href=\"https://simplebooklet.com":                                  "SIMPLEBOOKLET",
 		"With GetResponse Landing Pages, lead generation has never been easier":                   "GETRESPONSE",
 		"Looks like you've traveled too far into cyberspace.":                                     "VEND",
-		"is not a registered InCloud YouTrack.": "JETBRAINS",
+		"is not a registered InCloud YouTrack.":                                                   "JETBRAINS",
 	}
+
+	/* Congrats! You are reading the source code!
+	*  While you're here, I should let you know
+	*  that 1 fingerprint alone cannot determine
+	*  the cloud service that's being used.
+	*  We need to double check to be positive
+	*  so we don't print() false positives! :-)
+	*
+	*  This is also a the reason why fingerprints
+	*  are hardcoded into the program. Take notez.
+	 */
 
 	for f, _ := range fingerprints {
 		if bytes.Contains(body, []byte(f)) {
@@ -227,10 +345,7 @@ func (s *Subdomain) DNS(a *Options) {
 	if a.All {
 		detect(s.Url, a.Output, a.Ssl, a.Timeout)
 	} else {
-		cname, err := net.LookupCNAME(s.Url)
-		if err != nil {
-			return
-		}
+		cname := resolve(s.Url)
 
 		cnames := []string{
 			".cloudfront.net",
@@ -279,6 +394,10 @@ func (s *Subdomain) DNS(a *Options) {
 			".gr8.com",
 			"vendecommerce.com",
 			"myjetbrains.com",
+			".azurewebsites.net",
+			".cloudapp.net",
+			".trafficmanager.net",
+			".blob.core.windows.net",
 		}
 
 		for _, cn := range cnames {
