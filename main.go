@@ -130,8 +130,12 @@ func reverse(s string) string {
 
 func domain(url string) string {
 	r := reverse(url)
-	rr := strings.Split(r, ".")
-	rev := fmt.Sprintf("%s.%s", rr[1], rr[2])
+
+	rev := ""
+	if r != "" {
+		rr := strings.Split(r, ".")
+		rev = fmt.Sprintf("%s.%s", rr[1], rr[2])
+	}
 
 	return reverse(rev)
 }
