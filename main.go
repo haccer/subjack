@@ -156,6 +156,7 @@ func Whois(url string) (exist bool, dom string) {
 		"NOT FOUND",
 		"No match for ",
 		"No entries found ",
+		"No Data Found",
 	}
 
 	for _, match := range not_found {
