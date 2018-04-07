@@ -269,7 +269,7 @@ func identify(url string, ssl bool, timeout int) (service string) {
 	*  We need to double check to be positive
 	*  so we don't print() false positives! :-)
 	*
-	*  This is also a the reason why fingerprints
+	*  This is also the reason why fingerprints
 	*  are hardcoded into the program. Take notez.
 	 */
 
