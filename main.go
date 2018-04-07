@@ -180,7 +180,7 @@ func https(url string, ssl bool, timeout int) (body []byte) {
 	return body
 }
 
-func identify(url string, ssl bool, timeout int) (service string) {
+func identify(url, cname string, ssl bool, timeout int) (service string) {
 	body := get(url, ssl, timeout)
 
 	service = ""
@@ -193,8 +193,6 @@ func identify(url string, ssl bool, timeout int) (service string) {
 		".trafficmanager.net",
 		".blob.core.windows.net",
 	}
-
-	cname := resolve(url)
 
 	// To be later substituted with miekg/dns
 	if _, err := net.LookupHost(url); err != nil {
@@ -332,8 +330,8 @@ func identify(url string, ssl bool, timeout int) (service string) {
 	return service
 }
 
-func detect(url, output string, ssl bool, timeout int) {
-	service := identify(url, ssl, timeout)
+func detect(url, cname, output string, ssl bool, timeout int) {
+	service := identify(url, cname, ssl, timeout)
 
 	if service != "" {
 		result := fmt.Sprintf("[%s] %s\n", service, url)
@@ -348,7 +346,7 @@ func detect(url, output string, ssl bool, timeout int) {
 
 func (s *Subdomain) DNS(a *Options) {
 	if a.All {
-		detect(s.Url, a.Output, a.Ssl, a.Timeout)
+		detect(s.Url, "", a.Output, a.Ssl, a.Timeout)
 	} else {
 		cname := resolve(s.Url)
 
@@ -407,7 +405,7 @@ func (s *Subdomain) DNS(a *Options) {
 
 		for _, cn := range cnames {
 			if strings.Contains(cname, cn) {
-				detect(s.Url, a.Output, a.Ssl, a.Timeout)
+				detect(s.Url, cname, a.Output, a.Ssl, a.Timeout)
 			}
 		}
 	}
