@@ -13,6 +13,9 @@ Subjack uses amass integration to:
 - enumerate subdomains recursively and/or with alterations.
 - save subdomains enumerated with amass integration.
 
+**Also New:**
+Subjack will check for subdomains attached to domains that don't exist and are **available to be registered**. No need for dig ever again! This is still cross-compatible too.
+
 ## Installing
 
 Requires [Go](https://golang.org/dl/) >= 1.10.
