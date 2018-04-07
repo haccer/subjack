@@ -345,11 +345,11 @@ func detect(url, cname, output string, ssl bool, timeout int) {
 }
 
 func (s *Subdomain) DNS(a *Options) {
-	if a.All {
-		detect(s.Url, "", a.Output, a.Ssl, a.Timeout)
-	} else {
-		cname := resolve(s.Url)
+	cname := resolve(s.Url)
 
+	if a.All {
+		detect(s.Url, cname, a.Output, a.Ssl, a.Timeout)
+	} else {
 		cnames := []string{
 			".cloudfront.net",
 			"amazonaws",
