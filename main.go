@@ -292,7 +292,7 @@ func identify(url string, ssl bool, timeout int) (service string) {
 		} else {
 			if ssl {
 				bd := https(url, ssl, timeout)
-				if bytes.Contains(bd, []byte("<Code>AccessDenied</Code>")) || bytes.Contains(bd, []byte("<Code>MissingKey</Code>")) {
+				if bytes.Contains(bd, []byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) {
 					service = ""
 				}
 			}
