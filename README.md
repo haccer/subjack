@@ -59,6 +59,8 @@ Currently checks for (44 Services):
 
 You can use [scanio.sh](https://gist.github.com/haccer/3698ff6927fc00c8fe533fc977f850f8) which is kind of a PoC script to mass-locate vulnerable subdomains using results from Rapid7's Project Sonar. This script parses and greps through the dump for desired CNAME records and makes a large list of subdomains to check with subjack if they're vulnerable to Hostile Subdomain Takeover. Of course this isn't the only method to get a large amount of data to test. **Please use this responsibly ;)**
 
+**Bonus:** scanio [Dockerfile](https://github.com/haccer/dockerfiles/blob/master/scanio/Dockerfile)
+
 ## Docker
 ```
 docker run --name subjack --rm -v <path to wordlist or save dir>:/data c0dy/subjack
