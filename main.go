@@ -325,6 +325,10 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		if size != 844 {
 			service = ""
 		}
+	case "UNBOUNCE":
+		if !strings.Contains("unbouncepages.com", cname) {
+			service = ""
+		}
 	}
 
 	return service
