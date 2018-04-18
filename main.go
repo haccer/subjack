@@ -292,7 +292,7 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		if !bytes.Contains(body, []byte("Bad request.")) {
 			service = ""
 		} else {
-			if ssl {
+			if !ssl {
 				bd := https(url, ssl, timeout)
 				if !bytes.Contains(bd, []byte("Bad request.")) {
 					service = ""
