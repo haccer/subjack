@@ -294,7 +294,7 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		} else {
 			if ssl {
 				bd := https(url, ssl, timeout)
-				if bytes.Contains(bd, []byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) {
+				if !bytes.Contains(bd, []byte("Bad request.")) {
 					service = ""
 				}
 			}
@@ -317,7 +317,7 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		}
 	case "MAILERLITE":
 		size := len(body)
-		if size != 9 {
+		if size != 9 && !strings.Contains("landing.subscribepage.com", cname) {
 			service = ""
 		}
 	case "ACTIVECAMPAIGN":
