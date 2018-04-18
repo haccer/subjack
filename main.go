@@ -348,7 +348,12 @@ func (s *Subdomain) DNS(a *Options) {
 	cname := resolve(s.Url)
 
 	if a.All {
-		detect(s.Url, cname, a.Output, a.Ssl, a.Timeout)
+		/* This one time a domain was pointing to '\032.'
+		*  and since there are no 1 char TLDs....
+		*/
+		if !(len(cname) <=3) {
+			detect(s.Url, cname, a.Output, a.Ssl, a.Timeout)
+		}
 	} else {
 		cnames := []string{
 			".cloudfront.net",
