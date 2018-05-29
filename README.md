@@ -43,8 +43,8 @@ Options:
 - `-r` enables recursive subdomain brute forcing (Use with -d or -dL).
 - `-alts` enables subdomain alterations (Use with -d or -dL).
 
-Currently checks for (44 Services):
-> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Mashery, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, Unbounce, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
+Currently checks for (43 Services):
+> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, Unbounce, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
 
 <!--
 ## Screenshots
