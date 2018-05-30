@@ -33,6 +33,7 @@ type Options struct {
 	Brute      bool
 	Recursive  bool
 	Alts       bool
+	Verbose    bool
 }
 
 type Subdomain struct {
@@ -238,7 +239,6 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		"This UserVoice subdomain is currently available!":                                           "USERVOICE",
 		"project not found":                                                                          "SURGE",
 		"Repository not found":                                                                       "BITBUCKET",
-		"The requested URL was not found on this server.":                                            "UNBOUNCE",
 		"This page is reserved for artistic dogs.":                                                   "INTERCOM",
 		"<h1 class=\"headline\">Uh oh. That page doesn’t exist.</h1>":                                "INTERCOM",
 		"<p class=\"description\">The page you are looking for doesn't exist or has been moved.</p>": "WEBFLOW",
@@ -262,17 +262,6 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		"Looks like you've traveled too far into cyberspace.":                                     "VEND",
 		"is not a registered InCloud YouTrack.":                                                   "JETBRAINS",
 	}
-
-	/* Congrats! You are reading the source code!
-	*  While you're here, I should let you know
-	*  that 1 fingerprint alone cannot determine
-	*  the cloud service that's being used.
-	*  We need to double check to be positive
-	*  so we don't print() false positives! :-)
-	*
-	*  This is also the reason why fingerprints
-	*  are hardcoded into the program. Take notez.
-	 */
 
 	for f, _ := range fingerprints {
 		if bytes.Contains(body, []byte(f)) {
@@ -324,22 +313,30 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 		if size != 844 {
 			service = ""
 		}
-	case "UNBOUNCE":
-		if !strings.Contains("unbouncepages.com", cname) {
-			service = ""
-		}
 	}
 
 	return service
 }
 
-func detect(url, cname, output string, ssl bool, timeout int) {
+func detect(url, cname, output string, ssl, verbose bool, timeout int) {
 	service := identify(url, cname, ssl, timeout)
 
 	if service != "" {
 		result := fmt.Sprintf("[%s] %s\n", service, url)
+		c := fmt.Sprintf("\u001b[32;1m%s\u001b[0m", service)
+		out := strings.Replace(result, service, c, -1)
+		fmt.Printf(out)
 
-		fmt.Printf(result)
+		if output != "" {
+			write(result, output)
+		}
+	}
+
+	if service == "" && verbose {
+		result := fmt.Sprintf("[Not Vulnerable] %s\n", url)
+		c := "\u001b[31;1mNot Vulnerable\u001b[0m"
+		out := strings.Replace(result, "Not Vulnerable", c, -1)
+		fmt.Printf(out)
 
 		if output != "" {
 			write(result, output)
@@ -353,9 +350,9 @@ func (s *Subdomain) DNS(a *Options) {
 	if a.All {
 		/* This one time a domain was pointing to '\032.'
 		*  and since there are no 1 char TLDs....
-		*/
-		if !(len(cname) <=3) {
-			detect(s.Url, cname, a.Output, a.Ssl, a.Timeout)
+		 */
+		if !(len(cname) <= 3) {
+			detect(s.Url, cname, a.Output, a.Ssl, a.Verbose, a.Timeout)
 		}
 	} else {
 		cnames := []string{
@@ -379,7 +376,6 @@ func (s *Subdomain) DNS(a *Options) {
 			"uservoice.com",
 			"surge.sh",
 			"bitbucket.io",
-			"unbouncepages.com",
 			"custom.intercom.help",
 			"proxy.webflow.com",
 			"landing.subscribepage.com",
@@ -412,7 +408,7 @@ func (s *Subdomain) DNS(a *Options) {
 
 		for _, cn := range cnames {
 			if strings.Contains(cname, cn) {
-				detect(s.Url, cname, a.Output, a.Ssl, a.Timeout)
+				detect(s.Url, cname, a.Output, a.Ssl, a.Verbose, a.Timeout)
 			}
 		}
 	}
@@ -517,6 +513,7 @@ func main() {
 	flag.StringVar(&a.Output, "o", "", "Output file to write results to.")
 	flag.BoolVar(&a.Ssl, "ssl", false, "Force HTTPS connections (May increase accuracy. Default: http://).")
 	flag.BoolVar(&a.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
+	flag.BoolVar(&a.Verbose, "v", false, "Display more information per each request.")
 
 	// Enumeration options
 	flag.StringVar(&a.SaveSubs, "save", "", "Output file to write subdomains saved with amass to.")
