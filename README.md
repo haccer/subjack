@@ -36,15 +36,16 @@ Options:
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
 - `-o results.txt` where to save results to.
 - `-ssl` enforces HTTPS requests which may return a different set of results and increase accuracy.
-- `-a` skips CNAME check and sends requests to every URL.
+- `-a` skips CNAME check and sends requests to every URL. **(Recommended)**
+- `-v` verbose. Display more information per each request. 
 - `-save subdomains.txt` is to save subdomains enumerated with amass (Use with -d or -dL).
 - `-dL domains.txt` is a list of domains to enumerate subdomains using amass.
 - `-brute` enables subdomain brute forcing (Use with -d or -dL).
 - `-r` enables recursive subdomain brute forcing (Use with -d or -dL).
 - `-alts` enables subdomain alterations (Use with -d or -dL).
 
-Currently checks for (43 Services):
-> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, Unbounce, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
+Currently checks for:
+> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
 
 <!--
 ## Screenshots
@@ -59,11 +60,6 @@ Currently checks for (43 Services):
 
 You can use [scanio.sh](https://gist.github.com/haccer/3698ff6927fc00c8fe533fc977f850f8) which is kind of a PoC script to mass-locate vulnerable subdomains using results from Rapid7's Project Sonar. This script parses and greps through the dump for desired CNAME records and makes a large list of subdomains to check with subjack if they're vulnerable to Hostile Subdomain Takeover. Of course this isn't the only method to get a large amount of data to test. **Please use this responsibly ;)**
 
-## Docker
-```
-docker run --name subjack --rm -v <path to wordlist or save dir>:/data c0dy/subjack
-```
-
 ## FAQ
 **Q:** What should my wordlist look like?
 
@@ -77,10 +73,6 @@ cdn.cody.su
 dev.cody.su
 dev2.twitter.com
 ```
-
-**Q:** I ran my scan and nothing happened. What does this mean?
-
-**A:** In most cases, this means that subjack didn't discover any vulnerable subdomains in your wordlist or your wordlist of is formatted weird.
 
 ## References
 Extra information about Hostile Subdomain Takeovers:
