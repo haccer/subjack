@@ -10,7 +10,6 @@ install:
   - echo %GOPATH%
   - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
   - go version
-  - go env
   
 build: false
 
