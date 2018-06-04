@@ -157,15 +157,17 @@ func Whois(url string) (exist bool, dom string) {
 
 	// Will probably need to be updated for each TLD.
 	not_found := []string{
-		"Domain not found.",
-		"NOT FOUND",
-		"No match for ",
-		"No entries found ",
-		"No Data Found",
+		"domain not found.",
+		"not found",
+		"no match for ",
+		"no entries found ",
+		"no data found",
 	}
+	
+	body := fmt.Sprintf("%s", resp)
 
 	for _, match := range not_found {
-		if strings.Contains(fmt.Sprintf("%s", resp), match) {
+		if strings.Contains(strings.ToLower(body), match) {
 			exist = true
 			break
 		}
