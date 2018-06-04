@@ -41,7 +41,7 @@ type Subdomain struct {
 }
 
 type Enum struct {
-	Results chan *amass.AmassRequest
+	Results chan *amass.AmassOutput
 	Finish  chan struct{}
 }
 
@@ -432,7 +432,7 @@ func enumOut(e *Enum, a *Options) {
 }
 
 func enumerate(a *Options) {
-	results := make(chan *amass.AmassRequest, a.Threads*10)
+	results := make(chan *amass.AmassOutput, a.Threads*10)
 	finish := make(chan struct{})
 	var err error
 
