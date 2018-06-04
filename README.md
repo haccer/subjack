@@ -47,15 +47,6 @@ Options:
 Currently checks for:
 > Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Desk, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
 
-<!--
-## Screenshots
-<img src="https://i.imgur.com/xfjSuwW.jpg" />
-<img src="https://i.imgur.com/2bZF0Ge.png" />
--->
-
-## In Action
-![realtime](https://github.com/haccer/haccer.github.io/blob/master/img/subjack1.gif)
-
 ## Practical Use
 
 You can use [scanio.sh](https://gist.github.com/haccer/3698ff6927fc00c8fe533fc977f850f8) which is kind of a PoC script to mass-locate vulnerable subdomains using results from Rapid7's Project Sonar. This script parses and greps through the dump for desired CNAME records and makes a large list of subdomains to check with subjack if they're vulnerable to Hostile Subdomain Takeover. Of course this isn't the only method to get a large amount of data to test. **Please use this responsibly ;)**
