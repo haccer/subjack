@@ -15,7 +15,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/caffix/amass/amass"
-	"github.com/domainr/whois"
+	"github.com/haccer/available"
 	"github.com/miekg/dns"
 	http "github.com/valyala/fasthttp"
 )
@@ -129,53 +129,6 @@ func reverse(s string) string {
 	return string(cc)
 }
 
-func domain(url string) string {
-	r := reverse(url)
-
-	rev := ""
-	if r != "" {
-		rr := strings.Split(r, ".")
-		rev = fmt.Sprintf("%s.%s", rr[1], rr[2])
-	}
-
-	return reverse(rev)
-}
-
-func Whois(url string) (exist bool, dom string) {
-	exist = false
-
-	d := domain(url)
-	req, err := whois.NewRequest(d)
-	if err != nil {
-		return
-	}
-
-	resp, err := whois.DefaultClient.Fetch(req)
-	if err != nil {
-		return
-	}
-
-	// Will probably need to be updated for each TLD.
-	not_found := []string{
-		"domain not found.",
-		"not found",
-		"no match for ",
-		"no entries found ",
-		"no data found",
-	}
-	
-	body := fmt.Sprintf("%s", resp)
-
-	for _, match := range not_found {
-		if strings.Contains(strings.ToLower(body), match) {
-			exist = true
-			break
-		}
-	}
-
-	return exist, url
-}
-
 func https(url string, ssl bool, timeout int) (body []byte) {
 	newUrl := fmt.Sprintf("https://%s", url)
 	body = get(newUrl, ssl, timeout)
@@ -211,9 +164,9 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 			// domains we could probably register.
 			// No other tool does this o.o [^-^] :D
 
-			dead, url := Whois(cname)
+			dead, _ := available.Domain(cname)
 			if dead {
-				service = fmt.Sprintf("DOMAIN - %s", url[:len(url)-1])
+				service = fmt.Sprintf("DOMAIN - %s", url)
 			}
 		}
 	}
