@@ -164,7 +164,7 @@ func identify(url, cname string, ssl bool, timeout int) (service string) {
 			// domains we could probably register.
 			// No other tool does this o.o [^-^] :D
 
-			dead, _ := available.Domain(cname)
+			dead := available.Domain(cname)
 			if dead {
 				service = fmt.Sprintf("DOMAIN - %s", url)
 			}
