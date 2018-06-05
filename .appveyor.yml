@@ -14,7 +14,7 @@ install:
 build: false
 
 test_script:
-  - go get github.com/domainr/whois
+  - go get github.com/haccer/available
   - go get github.com/miekg/dns
   - go get github.com/caffix/amass
   - go get github.com/valyala/fasthttp
