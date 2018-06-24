@@ -13,9 +13,9 @@ Subjack will check for subdomains attached to domains that don't exist (NXDOMAIN
 
 ## Installing
 
-Requires [Go](https://golang.org/dl/) >= 1.10.
+Requires [Go](https://golang.org/dl/)
 
-`go get -u github.com/haccer/subjack`
+`go get github.com/haccer/subjack`
 
 ## How To Use:
 
@@ -56,7 +56,7 @@ func main() {
 	service := subjack.Identify(subdomain)
 
 	if service != "" {
-		fmt.Printf("[+] %s is pointing to a vulnerable %s service.\n", subdomain, strings.ToLower(service))
+		fmt.Printf("%s is pointing to a vulnerable %s service.\n", subdomain,strings.ToLower(service))
 	}
 }
 ```
