@@ -84,8 +84,10 @@ func (s *Subdomain) dns(o *Options) {
 	}
 }
 
-/* Triage step to check whether the CNAME matches
-* the fingerprinted CNAME of a vulnerable cloud service. */
+/*
+* Triage step to check whether the CNAME matches
+* the fingerprinted CNAME of a vulnerable cloud service.
+ */
 func VerifyCNAME(subdomain string) (match bool) {
 	cname := resolve(subdomain)
 	match = false
