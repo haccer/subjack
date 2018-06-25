@@ -53,10 +53,11 @@ func main() {
 	subdomain := "dead.cody.su"
 	/* Use subjack's advanced detection to identify 
 	if the subdomain is able to be taken over. */
-	service := subjack.Identify(subdomain)
+	service := subjack.Identify(subdomain, false, 10)
 
 	if service != "" {
-		fmt.Printf("%s is pointing to a vulnerable %s service.\n", subdomain,strings.ToLower(service))
+		service = strings.ToLower(service)
+		fmt.Printf("%s is pointing to a vulnerable %s service.\n", subdomain, service)
 	}
 }
 ```
