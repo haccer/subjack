@@ -17,6 +17,7 @@ func main() {
 	flag.BoolVar(&o.Ssl, "ssl", false, "Force HTTPS connections (May increase accuracy (Default: http://).")
 	flag.BoolVar(&o.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
 	flag.BoolVar(&o.Verbose, "v", false, "Display more information per each request.")
+	flag.StringVar(&o.Output, "o", "", "Output results to file.")
 
 	flag.Parse()
 
