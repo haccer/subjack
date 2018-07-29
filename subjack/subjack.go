@@ -115,7 +115,6 @@ func VerifyCNAME(subdomain string) (match bool) {
 		"bitbucket.io",
 		"custom.intercom.help",
 		"proxy.webflow.com",
-		"landing.subscribepage.com",
 		"endpoint.mykajabi.com",
 		"thinkific.com",
 		"teamwork.com",
@@ -262,7 +261,6 @@ func Identify(subdomain string, forceSSL bool, timeout int) (service string) {
 		"This page is reserved for artistic dogs.":                                                   "INTERCOM",
 		"<h1 class=\"headline\">Uh oh. That page doesn’t exist.</h1>":                                "INTERCOM",
 		"<p class=\"description\">The page you are looking for doesn't exist or has been moved.</p>": "WEBFLOW",
-		"Not found": "MAILERLITE",
 		"<h1>The page you were looking for doesn't exist.</h1>":                                   "KAJABI",
 		"You may have mistyped the address or the page may have moved.":                           "THINKIFIC",
 		"<h1>Error 404: Page Not Found</h1>":                                                      "TAVE",
@@ -321,11 +319,6 @@ func Identify(subdomain string, forceSSL bool, timeout int) (service string) {
 		}
 	case "PROPOSIFY":
 		if !bytes.Contains(body, []byte("The page you requested was not found.")) {
-			service = ""
-		}
-	case "MAILERLITE":
-		size := len(body)
-		if size != 9 && !strings.Contains("landing.subscribepage.com", cname) {
 			service = ""
 		}
 	case "ACTIVECAMPAIGN":
