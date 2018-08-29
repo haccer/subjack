@@ -8,6 +8,7 @@ import (
 func get(url string, ssl bool, timeout int) (body []byte) {
 	req := fasthttp.AcquireRequest()
 	req.SetRequestURI(site(url, ssl))
+	req.Header.Add("Connection", "close")
 	resp := fasthttp.AcquireResponse()
 
 	client := &fasthttp.Client{}
