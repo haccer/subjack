@@ -32,7 +32,7 @@ Options:
 - `-v` verbose. Display more information per each request. 
 
 Currently checks for:
-> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress, Zendesk
+> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress
 
 ## Practical Use
 
@@ -83,7 +83,3 @@ Extra information about Hostile Subdomain Takeovers:
 
 - [https://github.com/EdOverflow/can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz)
 - [https://labs.detectify.com/2014/10/21/hostile-subdomain-takeover-using-herokugithubdesk-more/](https://labs.detectify.com/2014/10/21/hostile-subdomain-takeover-using-herokugithubdesk-more/)
-
-## Contact
-
-Shout me out on Twitter: [@now](https://twitter.com/now)
