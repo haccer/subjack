@@ -122,7 +122,7 @@ IDENTIFY:
 		for n := range fingerprints[f].Fingerprint {
 			if bytes.Contains(body, []byte(fingerprints[f].Fingerprint[n])) {
 				service = strings.ToUpper(fingerprints[f].Service)
-				break IDENTIFY
+				break
 			}
 		}
 
