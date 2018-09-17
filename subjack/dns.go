@@ -2,16 +2,21 @@ package subjack
 
 import (
 	"fmt"
-	"github.com/miekg/dns"
+	"net"
 	"strings"
+
+	"github.com/haccer/available"
+	"github.com/miekg/dns"
 )
 
 func (s *Subdomain) dns(o *Options) {
+	config := fingerprints(o.Config)
+
 	if o.All {
-		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Timeout)
+		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Timeout, config)
 	} else {
-		if VerifyCNAME(s.Url) {
-			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Timeout)
+		if VerifyCNAME(s.Url, config) {
+			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Timeout, config)
 		}
 
 		if o.Verbose {
@@ -47,4 +52,47 @@ func resolve(url string) (cname string) {
 	}
 
 	return cname
+}
+
+func nslookup(domain string) (nameservers []string) {
+	m := new(dns.Msg)
+	m.SetQuestion(dotDomain(domain), dns.TypeNS)
+	ret, err := dns.Exchange(m, "8.8.8.8:53")
+	if err != nil {
+		return
+	}
+
+	nameservers = []string{}
+
+	for _, a := range ret.Answer {
+		if t, ok := a.(*dns.NS); ok {
+			nameservers = append(nameservers, t.Ns)
+		}
+	}
+
+	return nameservers
+}
+
+func nxdomain(nameserver string) bool {
+	if _, err := net.LookupHost(nameserver); err != nil {
+		if strings.Contains(fmt.Sprintln(err), "no such host") {
+			return true
+		}
+	}
+
+	return false
+}
+
+func NS(domain, output string, verbose bool) {
+	nameservers := nslookup(domain)
+	for _, ns := range nameservers {
+		if nxdomain(ns) {
+			av := available.Domain(ns)
+
+			if av {
+				msg := fmt.Sprintf("[!] %s's nameserver: %s is available for purchase!\n", domain, ns)
+				fmt.Printf(msg)
+			}
+		}
+	}
 }

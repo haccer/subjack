@@ -9,6 +9,11 @@ import (
 )
 
 func main() {
+	GOPATH := os.Getenv("GOPATH")
+	Project := "/src/github.com/haccer/subjack/"
+	configFile := "fingerprints.json"
+	defaultConfig := GOPATH + Project + configFile
+
 	o := subjack.Options{}
 
 	flag.StringVar(&o.Wordlist, "w", "", "Path to wordlist.")
@@ -18,6 +23,7 @@ func main() {
 	flag.BoolVar(&o.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
 	flag.BoolVar(&o.Verbose, "v", false, "Display more information per each request.")
 	flag.StringVar(&o.Output, "o", "", "Output results to file (Subjack will write JSON if file ends with '.json').")
+	flag.StringVar(&o.Config, "c", defaultConfig, "Path to configuration file.")
 
 	flag.Parse()
 

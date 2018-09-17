@@ -8,8 +8,27 @@
 
 Subjack is a Hostile Subdomain Takeover tool written in Go designed to scan a list of subdomains concurrently and identify ones that are able to be hijacked. With Go's speed and efficiency, this tool really stands out when it comes to mass-testing. Always double check the results manually to rule out false positives.
 
-**New:**
-Subjack will check for subdomains attached to domains that don't exist (NXDOMAIN) and are **available to be registered**. No need for dig ever again! This is still cross-compatible too.
+Subjack will also check for subdomains attached to domains that don't exist (NXDOMAIN) and are **available to be registered**. No need for dig ever again! This is still cross-compatible too.
+
+**What's New? (Last Updated 09/16/18)**
+- Custom fingerprint support
+- New Services (Re-added Zendesk, Added Readme)
+- Slight performance enhancements
+
+```
+-] Benchmark based on 10k subdomain list at 100 threads. 
+- Machine Details: Debian 9, 1gb ram.
+
+Pervious version of Subjack
+real    2m51.114s
+user    0m14.300s
+sys     0m7.388s
+
+New version of Subjack
+real    2m17.612s
+user    0m22.104s
+sys     0m7.096s
+```
 
 ## Installing
 
@@ -30,9 +49,7 @@ Options:
 - `-ssl` enforces HTTPS requests which may return a different set of results and increase accuracy.
 - `-a` skips CNAME check and sends requests to every URL. **(Recommended)**
 - `-v` verbose. Display more information per each request. 
-
-Currently checks for:
-> Acquia Cloud Site Factory, ActiveCampaign, AfterShip, Aha!, Amazon S3 Bucket, Amazon Cloudfront, Big Cartel, Bitbucket, Brightcove, Campaign Monitor, Cargo Collective, Fastly, FeedPress, GetResponse, Ghost, Github, Helpjuice, Help Scout, Heroku, Intercom, JetBrains, Kajabi, MailerLite, Microsoft Azure, Pantheon.io, Proposify, Shopify, simplebooklet, StatusPage, Surge, Táve, Teamwork, Thinkific, Tictail, Tumblr, UserVoice, Vend Ecommerce, Webflow, Wishpond, WordPress
+- `-c` Path to configuration file.
 
 ## Practical Use
 
@@ -45,15 +62,23 @@ package main
 
 import (
 	"fmt"
-	"github.com/haccer/subjack/subjack"
+	"encoding/json"
+	"io/ioutil"
 	"strings"
+
+	"github.com/haccer/subjack/subjack"
 )
+ 
 
 func main() {
+	var fingerprints []subjack.Fingerprints
+	config, _ := ioutil.ReadFile("custom_fingerprints.json")
+	json.Unmarshal(config, &fingerprints)
+
 	subdomain := "dead.cody.su"
 	/* Use subjack's advanced detection to identify 
 	if the subdomain is able to be taken over. */
-	service := subjack.Identify(subdomain, false, 10)
+	service := subjack.Identify(subdomain, false, 10, fingerprints)
 
 	if service != "" {
 		service = strings.ToLower(service)

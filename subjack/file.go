@@ -108,3 +108,17 @@ func writeJSON(service, url, output string) {
 
 	wf.Write(results)
 }
+
+func fingerprints(file string) (data []Fingerprints) {
+	config, err := ioutil.ReadFile(file)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = json.Unmarshal(config, &data)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return data
+}

@@ -6,6 +6,7 @@ import (
 )
 
 type Options struct {
+	Domain   string
 	Wordlist string
 	Threads  int
 	Timeout  int
@@ -13,6 +14,7 @@ type Options struct {
 	Ssl      bool
 	All      bool
 	Verbose  bool
+	Config   string
 }
 
 type Subdomain struct {
@@ -27,7 +29,8 @@ func Process(o *Options) {
 		log.Fatalln(err)
 	}
 
-	var wg sync.WaitGroup
+	wg := new(sync.WaitGroup)
+
 	for i := 0; i < o.Threads; i++ {
 		wg.Add(1)
 		go func() {
