@@ -17,7 +17,7 @@ Subjack will also check for subdomains attached to domains that don't exist (NXD
 
 ```
 -] Benchmark based on 10k subdomain list at 100 threads. 
-- Machine Details: Debian 9, 1gb ram.
+-] Tested on: GCP Debian 9, 1 vCPU 3.75GB memory.
 
 Pervious version of Subjack
 real    2m51.114s
