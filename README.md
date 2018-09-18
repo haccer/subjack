@@ -12,7 +12,7 @@ Subjack will also check for subdomains attached to domains that don't exist (NXD
 
 **What's New? (Last Updated 09/17/18)**
 - Custom fingerprint support
-- New Services (Re-added Zendesk, Added Readme, Bitly, and Netlify)
+- New Services (Re-added Zendesk && Added Readme, Bitly, Netlify, and more)
 - Slight performance enhancements
 
 ```
