@@ -9,9 +9,10 @@ import (
 )
 
 type Verify struct {
-	Body string `json:"body"`
-	Size int    `json:"size"`
-	Ssl  bool   `json:"ssl"`
+	Body  string `json:"body"`
+	Size  int    `json:"size"`
+	Ssl   bool   `json:"ssl"`
+	Cname bool   `json:"cname"`
 }
 
 type Fingerprints struct {
@@ -147,6 +148,10 @@ IDENTIFY:
 			if len(body) != fingerprints[f].Checks.Size {
 				service = ""
 			}
+		}
+
+		if len(body) == 0 && fingerprints[f].Checks.Cname && cname == fingerprints[f].Cname[0]+"." {
+			service = strings.ToUpper(fingerprints[f].Service)
 		}
 
 	}

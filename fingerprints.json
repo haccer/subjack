@@ -435,5 +435,31 @@
 			"Project doesnt exist... yet!"
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "netlify",
+		"cname": [
+			"netlify.com"
+		],
+		"fingerprint": [
+			"Not Found"
+		],
+		"verify": {
+			"size": 9 
+		},
+		"nxdomain": false
+	},
+	{
+		"service": "bitly",
+		"cname": [
+			"cname.bitly.com"
+		],
+		"fingerprint": [
+			"Hey There, This Is A Branded Short Domain."
+		],
+		"verify": {
+			"cname": true
+		},
+		"nxdomain": false
 	}
 ]
