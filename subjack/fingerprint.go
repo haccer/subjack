@@ -129,6 +129,10 @@ IDENTIFY:
 
 		/* This next section is for if we need to do a
 		* 2nd verification check defined in the config. */
+
+		/* Double check for another fingerprint in response
+		* Or check if requesting with HTTPS has a similar
+		* response */
 		if fingerprints[f].Checks.Body != "" {
 			if !bytes.Contains(body, []byte(fingerprints[f].Checks.Body)) {
 				service = ""
@@ -144,12 +148,15 @@ IDENTIFY:
 			}
 		}
 
+		// Check if response matches fingerprinted length.
 		if fingerprints[f].Checks.Size != 0 {
 			if len(body) != fingerprints[f].Checks.Size {
 				service = ""
 			}
 		}
 
+		/* This is for special cases when the body == 0, and the CNAME must match the exact CNAME
+		* Bitly uses this */
 		if len(body) == 0 && fingerprints[f].Checks.Cname && cname == fingerprints[f].Cname[0]+"." {
 			service = strings.ToUpper(fingerprints[f].Service)
 		}
