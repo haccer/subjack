@@ -411,7 +411,9 @@
 			".azurewebsites.net",
 			".cloudapp.net",
 			".trafficmanager.net",
-			".blob.core.windows.net"
+			".blob.core.windows.net",
+			".azure-api.net",
+			".azureedge.net"
 		],
 		"fingerprint": [],
 		"nxdomain": true
@@ -461,5 +463,29 @@
 			"cname": true
 		},
 		"nxdomain": false
+	},
+	{
+		"service": "maxcdn",
+		"cname": [
+			".netdna-cdn.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "apigee",
+		"cname": [
+			"-portal.apigee.net"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "smugmug",
+		"cname": [
+			"domains.smugmug.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
 	}
 ]
