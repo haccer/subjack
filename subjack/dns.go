@@ -86,12 +86,24 @@ func nxdomain(nameserver string) bool {
 func NS(domain, output string, verbose bool) {
 	nameservers := nslookup(domain)
 	for _, ns := range nameservers {
+		if verbose {
+			msg := fmt.Sprintf("[*] %s: Nameserver is %s\n", domain, ns)
+			fmt.Printf(msg)
+
+			if output != "" {
+				write(msg, output)
+			}
+		}
+
 		if nxdomain(ns) {
 			av := available.Domain(ns)
 
 			if av {
 				msg := fmt.Sprintf("[!] %s's nameserver: %s is available for purchase!\n", domain, ns)
 				fmt.Printf(msg)
+				if output != "" {
+					write(msg, output)
+				}
 			}
 		}
 	}

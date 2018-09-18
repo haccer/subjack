@@ -155,10 +155,21 @@ IDENTIFY:
 			}
 		}
 
+		/* For now this just checks whether a CNAME is actually attached.
+		* Was having some issues using strings.Contains(cname, fingerprints[f].Cname[0])
+		 */
+		if fingerprints[f].Checks.Cname {
+			if cname == "" {
+				service = ""
+			}
+		}
+
 		/* This is for special cases when the body == 0, and the CNAME must match the exact CNAME
 		* Bitly uses this */
 		if len(body) == 0 && fingerprints[f].Checks.Cname && cname == fingerprints[f].Cname[0]+"." {
 			service = strings.ToUpper(fingerprints[f].Service)
+		} else if len(body) == 0 && fingerprints[f].Checks.Cname && cname != fingerprints[f].Cname[0]+"." {
+			service = ""
 		}
 
 	}

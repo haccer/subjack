@@ -447,7 +447,8 @@
 			"Not Found"
 		],
 		"verify": {
-			"size": 9 
+			"size": 9,
+			"cname": true
 		},
 		"nxdomain": false
 	},

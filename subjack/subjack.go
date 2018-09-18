@@ -15,6 +15,7 @@ type Options struct {
 	All      bool
 	Verbose  bool
 	Config   string
+	Trace    bool
 }
 
 type Subdomain struct {
@@ -48,4 +49,8 @@ func Process(o *Options) {
 
 	close(urls)
 	wg.Wait()
+}
+
+func Single(o *Options) {
+	NS(o.Domain, o.Output, o.Verbose)
 }

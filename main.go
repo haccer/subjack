@@ -16,6 +16,7 @@ func main() {
 
 	o := subjack.Options{}
 
+	flag.StringVar(&o.Domain, "d", "", "Domain.")
 	flag.StringVar(&o.Wordlist, "w", "", "Path to wordlist.")
 	flag.IntVar(&o.Threads, "t", 10, "Number of concurrent threads (Default: 10).")
 	flag.IntVar(&o.Timeout, "timeout", 10, "Seconds to wait before connection timeout (Default: 10).")
@@ -24,6 +25,7 @@ func main() {
 	flag.BoolVar(&o.Verbose, "v", false, "Display more information per each request.")
 	flag.StringVar(&o.Output, "o", "", "Output results to file (Subjack will write JSON if file ends with '.json').")
 	flag.StringVar(&o.Config, "c", defaultConfig, "Path to configuration file.")
+	flag.BoolVar(&o.Trace, "trace", false, "Trace DNS.")
 
 	flag.Parse()
 
