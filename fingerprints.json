@@ -410,9 +410,11 @@
 		"cname": [
 			".azurewebsites.net",
 			".cloudapp.net",
+			".cloudapp.azure.com",
 			".trafficmanager.net",
 			".blob.core.windows.net",
 			".azure-api.net",
+			".azurehdinsight.net",
 			".azureedge.net"
 		],
 		"fingerprint": [],
