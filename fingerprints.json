@@ -441,20 +441,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "netlify",
-		"cname": [
-			"netlify.com"
-		],
-		"fingerprint": [
-			"Not Found"
-		],
-		"verify": {
-			"size": 9,
-			"cname": true
-		},
-		"nxdomain": false
-	},
-	{
 		"service": "bitly",
 		"cname": [
 			"cname.bitly.com"
