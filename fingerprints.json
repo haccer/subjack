@@ -210,7 +210,8 @@
 	{
 		"service": "webflow",
 		"cname": [
-			"proxy.webflow.com"
+			"proxy.webflow.com",
+			"proxy-ssl.webflow.com"
 		],
 		"fingerprint": [
 			"<p class=\"description\">The page you are looking for doesn't exist or has been moved.</p>"
