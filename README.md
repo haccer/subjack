@@ -15,21 +15,6 @@ Subjack will also check for subdomains attached to domains that don't exist (NXD
 - New Services (Re-added Zendesk && Added Readme, Bitly, and more)
 - Slight performance enhancements
 
-```
--] Benchmark based on 10k subdomain list at 100 threads. 
--] Tested on: GCP Debian 9, 1 vCPU 3.75GB memory.
-
-Pervious version of Subjack
-real    2m51.114s
-user    0m14.300s
-sys     0m7.388s
-
-New version of Subjack
-real    2m17.612s
-user    0m22.104s
-sys     0m7.096s
-```
-
 ## Installing
 
 Requires [Go](https://golang.org/dl/)

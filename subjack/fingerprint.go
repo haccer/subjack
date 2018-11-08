@@ -44,8 +44,8 @@ VERIFY:
 	return match
 }
 
-func detect(url, output string, ssl, verbose bool, timeout int, config []Fingerprints) {
-	service := Identify(url, ssl, timeout, config)
+func detect(url, output string, ssl, verbose, manual bool, timeout int, config []Fingerprints) {
+	service := Identify(url, ssl, manual, timeout, config)
 
 	if service != "" {
 		result := fmt.Sprintf("[%s] %s\n", service, url)
@@ -83,7 +83,7 @@ func detect(url, output string, ssl, verbose bool, timeout int, config []Fingerp
 * is attached to a vulnerable cloud service and able to
 * be taken over.
  */
-func Identify(subdomain string, forceSSL bool, timeout int, fingerprints []Fingerprints) (service string) {
+func Identify(subdomain string, forceSSL, manual bool, timeout int, fingerprints []Fingerprints) (service string) {
 	body := get(subdomain, forceSSL, timeout)
 
 	cname := resolve(subdomain)
@@ -116,6 +116,12 @@ IDENTIFY:
 						break IDENTIFY
 					}
 				}
+			}
+
+			// Option to always print the CNAME and not check if it's available to be registered.
+			if manual && !dead {
+				service = "**DOMAIN - " + cname
+				break IDENTIFY
 			}
 		}
 

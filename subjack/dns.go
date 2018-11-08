@@ -13,10 +13,10 @@ func (s *Subdomain) dns(o *Options) {
 	config := fingerprints(o.Config)
 
 	if o.All {
-		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Timeout, config)
+		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
 	} else {
 		if VerifyCNAME(s.Url, config) {
-			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Timeout, config)
+			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
 		}
 
 		if o.Verbose {
