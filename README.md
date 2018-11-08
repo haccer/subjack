@@ -33,6 +33,7 @@ Options:
 - `-o results.txt` where to save results to. For JSON: `-o results.json`
 - `-ssl` enforces HTTPS requests which may return a different set of results and increase accuracy.
 - `-a` skips CNAME check and sends requests to every URL. **(Recommended)**
+- `-m`	flag the presence of a dead record, but valid CNAME entry.
 - `-v` verbose. Display more information per each request. 
 - `-c` Path to configuration file.
 
