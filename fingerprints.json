@@ -7,10 +7,6 @@
 		"fingerprint": [
 			"ERROR: The request could not be satisfied"
 		],
-		"verify": {
-			"ssl": true,
-			"body": "Bad request."
-		},
 		"nxdomain": false
 	},
 	{
@@ -124,19 +120,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "cargo",
-		"cname": [
-			"cargocollective.com"
-		],
-		"fingerprint": [
-			"<title>404 &mdash; File not found</title>"
-		],
-		"verify": {
-			"body": "cargocollective.com"
-		},
-		"nxdomain": false
-	},
-	{
 		"service": "feedpress",
 		"cname": [
 			"redirect.feedpress.me"
@@ -219,45 +202,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "kajabi",
-		"cname": [
-			"endpoint.mykajabi.com"
-		],
-		"fingerprint": [
-			"<h1>The page you were looking for doesn't exist.</h1>"
-		],
-		"verify": {
-			"body": "Use title if it's in the page YAML frontmatter"
-		},
-		"nxdomain": false
-	},
-	{
-		"service": "thinkific",
-		"cname": [
-			"thinkific.com"
-		],
-		"fingerprint": [
-			"You may have mistyped the address or the page may have moved."
-		],
-		"verify": {
-			"body": "iVBORw0KGgoAAAANSUhEUgAAAf"
-		},
-		"nxdomain": false
-	},
-	{
-		"service": "tave",
-		"cname": [
-			"clientaccess.tave.com"
-		],
-		"fingerprint": [
-			"<h1>Error 404: Page Not Found</h1>"
-		],
-		"verify": {
-			"body": "tave.com"
-		},
-		"nxdomain": false
-	},
-	{
 		"service": "wishpond",
 		"cname": [
 			"wishpond.com"
@@ -321,19 +265,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "activecampaign",
-		"cname": [
-			"activehosted.com"
-		],
-		"fingerprint": [
-			"alt=\"LIGHTTPD - fly light.\""
-		],
-		"verify": {
-			"size": 844
-		},
-		"nxdomain": false
-	},
-	{
 		"service": "campaignmonitor",
 		"cname": [
 			"createsend.com"
@@ -351,19 +282,6 @@
 		"fingerprint": [
 			"The site you are looking for could not be found."
 		],
-		"nxdomain": false
-	},
-	{
-		"service": "proposify",
-		"cname": [
-			"proposify.biz"
-		],
-		"fingerprint": [
-			"If you need immediate assistance, please contact <a href=\"mailto:support@proposify.biz"
-		],
-		"verify": {
-			"body": "The page you requested was not found."
-		},
 		"nxdomain": false
 	},
 	{
@@ -439,19 +357,6 @@
 		"fingerprint": [
 			"Project doesnt exist... yet!"
 		],
-		"nxdomain": false
-	},
-	{
-		"service": "bitly",
-		"cname": [
-			"cname.bitly.com"
-		],
-		"fingerprint": [
-			"Hey There, This Is A Branded Short Domain."
-		],
-		"verify": {
-			"cname": true
-		},
 		"nxdomain": false
 	},
 	{
