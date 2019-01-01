@@ -360,14 +360,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "maxcdn",
-		"cname": [
-			".netdna-cdn.com"
-		],
-		"fingerprint": [],
-		"nxdomain": true
-	},
-	{
 		"service": "apigee",
 		"cname": [
 			"-portal.apigee.net"
