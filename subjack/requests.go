@@ -1,6 +1,7 @@
 package subjack
 
 import (
+	"crypto/tls"
 	"github.com/valyala/fasthttp"
 	"time"
 )
@@ -11,7 +12,7 @@ func get(url string, ssl bool, timeout int) (body []byte) {
 	req.Header.Add("Connection", "close")
 	resp := fasthttp.AcquireResponse()
 
-	client := &fasthttp.Client{}
+	client := &fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
 	client.DoTimeout(req, resp, time.Duration(timeout)*time.Second)
 
 	return resp.Body()

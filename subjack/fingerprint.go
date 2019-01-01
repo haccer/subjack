@@ -96,7 +96,7 @@ IDENTIFY:
 			// Check if we can register this domain.
 			dead := available.Domain(cname)
 			if dead {
-				service = "DOMAIN - " + cname
+				service = "DOMAIN AVAILABLE - " + cname
 				break IDENTIFY
 			}
 
@@ -112,7 +112,7 @@ IDENTIFY:
 
 			// Option to always print the CNAME and not check if it's available to be registered.
 			if manual && !dead && cname != "" {
-				service = "**DOMAIN - " + cname
+				service = "DEAD DOMAIN - " + cname
 				break IDENTIFY
 			}
 		}
