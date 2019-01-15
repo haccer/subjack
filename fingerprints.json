@@ -10,6 +10,16 @@
 		"nxdomain": false
 	},
 	{
+		"service": "Netlify",
+		"cname": [
+			".netlify.com"
+		],
+		"fingerprint": [
+			"Not Found"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "fastly",
 		"cname": [
 			"fastly"
