@@ -48,8 +48,9 @@ sudo docker build -t subjack https://github.com/haccer/subjack.git
 2. Run the Docker image:
 
 ```bash
-sudo docker run subjack -v /input-data/:/data subjack -v -w /data/subdomains.txt -t 100 -timeout 30 -o /data/results.txt
+sudo docker run -v /input-data-dir/:/data subjack -v -w /data/subdomains.txt -t 100 -timeout 30 -o /data/results.txt
 ```
+This command assumes that `subdomains.txt` with domains to enumerate is in `/input-data-dir/` on the host machine. Output with `results.txt` will also appear in this directory. (`-v` switch is mounting the directory inside the container)
 
 ## Practical Use
 
