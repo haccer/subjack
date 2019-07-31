@@ -1,15 +1,5 @@
 [
 	{
-		"service": "cloudfront",
-		"cname": [
-			".cloudfront.net"
-		],
-		"fingerprint": [
-			"ERROR: The request could not be satisfied"
-		],
-		"nxdomain": false
-	},
-	{
 		"service": "fastly",
 		"cname": [
 			"fastly"
