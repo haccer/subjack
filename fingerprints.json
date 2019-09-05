@@ -9,7 +9,7 @@
             "If you are an Acquia Cloud customer and expect to see your site at this address"
 		],
 		"nxdomain": false
-	}
+	},
     {
 		"service": "Aftership",
 		"cname": [
