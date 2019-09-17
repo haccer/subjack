@@ -10,10 +10,9 @@ Subjack is a Subdomain Takeover tool written in Go designed to scan a list of su
 
 Subjack will also check for subdomains attached to domains that don't exist (NXDOMAIN) and are **available to be registered**. No need for dig ever again! This is still cross-compatible too.
 
-**What's New? (Last Updated 09/17/18)**
+**What's New? (Last Updated 09/17/19)**
 - Custom fingerprint support
-- New Services (Re-added Zendesk && Added Readme, Bitly, and more)
-- Slight performance enhancements
+- New Services (Added Canny and Helprace)
 
 ## Installing
 
