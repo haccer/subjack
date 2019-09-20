@@ -308,6 +308,16 @@
 			"No Site For Domain"
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "Landingi",
+		"cname": [
+			"cname.landingi.com"
+		],
+		"fingerprint": [
+			"It looks like you're lost..."
+		],
+		"nxdomain": false
     },
 	{
 		"service": "Launchrock",
