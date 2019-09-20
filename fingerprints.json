@@ -125,7 +125,18 @@
 			"Trying to access your account?"
 		],
 		"nxdomain": false
-    },
+	},
+	{
+		"service": "Canny",
+		"cname": [
+			"cname.canny.io"
+		],
+		"fingerprint": [
+			"Company Not Found",
+			"There is no such company. Did you enter the right URL?"
+		],
+		"nxdomain": false
+	},
 	{
 		"service": "Cargocollective",
 		"cname": [
@@ -233,6 +244,16 @@
 		],
 		"nxdomain": false
     },
+	{
+		"service": "Helprace",
+		"cname": [
+			"helprace.com"
+		],
+		"fingerprint": [
+			"Alias not configured!"
+		],
+		"nxdomain": false
+	},
 	{
 		"service": "Helpjuice",
 		"cname": [
