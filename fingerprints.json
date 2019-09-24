@@ -144,7 +144,17 @@
 		],
 		"fingerprint": [],
 		"nxdomain": false
-    },
+	},
+	{
+		"service": "Digitaloceanspaces",
+		"cname": [
+			"digitaloceanspaces.com"
+		],
+		"fingerprint": [
+		        "</BucketName><RequestId>tx000000000000"
+		],
+		"nxdomain": false
+	},
 	{
 		"service": "Distil",
 		"cname": [
