@@ -13,6 +13,7 @@ func main() {
 	Project := "/src/github.com/haccer/subjack/"
 	configFile := "fingerprints.json"
 	defaultConfig := GOPATH + Project + configFile
+	defaultDNS := "8.8.8.8"
 
 	o := subjack.Options{}
 
@@ -20,6 +21,7 @@ func main() {
 	flag.StringVar(&o.Wordlist, "w", "", "Path to wordlist.")
 	flag.IntVar(&o.Threads, "t", 10, "Number of concurrent threads (Default: 10).")
 	flag.IntVar(&o.Timeout, "timeout", 10, "Seconds to wait before connection timeout (Default: 10).")
+	flag.StringVar(&o.DNS, "dns", defaultDNS, "IP of DNS server to use (Default: 8.8.8.8).")
 	flag.BoolVar(&o.Ssl, "ssl", false, "Force HTTPS connections (May increase accuracy (Default: http://).")
 	flag.BoolVar(&o.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
 	flag.BoolVar(&o.Verbose, "v", false, "Display more information per each request.")
