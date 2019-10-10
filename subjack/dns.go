@@ -13,10 +13,10 @@ func (s *Subdomain) dns(o *Options) {
 	config := fingerprints(o.Config)
 
 	if o.All {
-		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
+		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, o.DNS, config)
 	} else {
-		if VerifyCNAME(s.Url, config) {
-			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
+		if VerifyCNAME(s.Url, o.DNS, config) {
+			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, o.DNS, config)
 		}
 
 		if o.Verbose {
@@ -36,11 +36,11 @@ func (s *Subdomain) dns(o *Options) {
 	}
 }
 
-func resolve(url string) (cname string) {
+func resolve(url string, server string) (cname string) {
 	cname = ""
 	d := new(dns.Msg)
 	d.SetQuestion(url+".", dns.TypeCNAME)
-	ret, err := dns.Exchange(d, "8.8.8.8:53")
+	ret, err := dns.Exchange(d, joinHost(server))
 	if err != nil {
 		return
 	}
@@ -54,10 +54,10 @@ func resolve(url string) (cname string) {
 	return cname
 }
 
-func nslookup(domain string) (nameservers []string) {
+func nslookup(domain string, server string) (nameservers []string) {
 	m := new(dns.Msg)
 	m.SetQuestion(dotDomain(domain), dns.TypeNS)
-	ret, err := dns.Exchange(m, "8.8.8.8:53")
+	ret, err := dns.Exchange(m, joinHost(server))
 	if err != nil {
 		return
 	}
@@ -83,8 +83,8 @@ func nxdomain(nameserver string) bool {
 	return false
 }
 
-func NS(domain, output string, verbose bool) {
-	nameservers := nslookup(domain)
+func NS(domain, server, output string, verbose bool) {
+	nameservers := nslookup(domain, server)
 	for _, ns := range nameservers {
 		if verbose {
 			msg := fmt.Sprintf("[*] %s: Nameserver is %s\n", domain, ns)

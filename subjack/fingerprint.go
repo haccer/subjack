@@ -19,8 +19,8 @@ type Fingerprints struct {
 * Triage step to check whether the CNAME matches
 * the fingerprinted CNAME of a vulnerable cloud service.
  */
-func VerifyCNAME(subdomain string, config []Fingerprints) (match bool) {
-	cname := resolve(subdomain)
+func VerifyCNAME(subdomain string, server string, config []Fingerprints) (match bool) {
+	cname := resolve(subdomain, server)
 	match = false
 
 VERIFY:
@@ -36,8 +36,8 @@ VERIFY:
 	return match
 }
 
-func detect(url, output string, ssl, verbose, manual bool, timeout int, config []Fingerprints) {
-	service := Identify(url, ssl, manual, timeout, config)
+func detect(url, output string, ssl, verbose, manual bool, timeout int, server string, config []Fingerprints) {
+	service := Identify(url, ssl, manual, timeout, server, config)
 
 	if service != "" {
 		result := fmt.Sprintf("[%s] %s\n", service, url)
@@ -75,10 +75,10 @@ func detect(url, output string, ssl, verbose, manual bool, timeout int, config [
 * is attached to a vulnerable cloud service and able to
 * be taken over.
  */
-func Identify(subdomain string, forceSSL, manual bool, timeout int, fingerprints []Fingerprints) (service string) {
+func Identify(subdomain string, forceSSL, manual bool, timeout int, server string, fingerprints []Fingerprints) (service string) {
 	body := get(subdomain, forceSSL, timeout)
 
-	cname := resolve(subdomain)
+	cname := resolve(subdomain, server)
 
 	if len(cname) <= 3 {
 		cname = ""

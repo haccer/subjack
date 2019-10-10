@@ -62,9 +62,10 @@ func main() {
 	json.Unmarshal(config, &fingerprints)
 
 	subdomain := "dead.cody.su"
+	server := "8.8.8.8"
 	/* Use subjack's advanced detection to identify 
 	if the subdomain is able to be taken over. */
-	service := subjack.Identify(subdomain, false, 10, fingerprints)
+	service := subjack.Identify(subdomain, false, 10, server, fingerprints)
 
 	if service != "" {
 		service = strings.ToLower(service)
