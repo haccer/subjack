@@ -16,6 +16,7 @@ type Options struct {
 	Verbose  bool
 	Config   string
 	Manual   bool
+	NoColor  bool
 }
 
 type Subdomain struct {
