@@ -13,17 +13,21 @@ func (s *Subdomain) dns(o *Options) {
 	config := fingerprints(o.Config)
 
 	if o.All {
-		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
+		detect(s.Url, o.Output, o.NoColor, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
 	} else {
 		if VerifyCNAME(s.Url, config) {
-			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
+			detect(s.Url, o.Output, o.NoColor, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
 		}
 
 		if o.Verbose {
 			result := fmt.Sprintf("[Not Vulnerable] %s\n", s.Url)
-			c := "\u001b[31;1mNot Vulnerable\u001b[0m"
-			out := strings.Replace(result, "Not Vulnerable", c, -1)
-			fmt.Printf(out)
+			if o.NoColor {
+				fmt.Printf(result)
+			} else {
+				c := "\u001b[31;1mNot Vulnerable\u001b[0m"
+				out := strings.Replace(result, "Not Vulnerable", c, -1)
+				fmt.Printf(out)
+			}
 
 			if o.Output != "" {
 				if chkJSON(o.Output) {
