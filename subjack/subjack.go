@@ -6,16 +6,17 @@ import (
 )
 
 type Options struct {
-	Domain   string
-	Wordlist string
-	Threads  int
-	Timeout  int
-	Output   string
-	Ssl      bool
-	All      bool
-	Verbose  bool
-	Config   string
-	Manual   bool
+	Domain      string
+	Wordlist    string
+	Threads     int
+	Timeout     int
+	Output      string
+	Ssl         bool
+	All         bool
+	Verbose     bool
+	Config      string
+	Manual      bool
+	IncludeEdge bool
 }
 
 type Subdomain struct {

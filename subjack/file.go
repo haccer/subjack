@@ -109,7 +109,7 @@ func writeJSON(service, url, output string) {
 	wf.Write(results)
 }
 
-func fingerprints(file string) (data []Fingerprints) {
+func fingerprints(file string, includeEdge bool) (data []Fingerprints) {
 	config, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatalln(err)
@@ -120,5 +120,17 @@ func fingerprints(file string) (data []Fingerprints) {
 		log.Fatalln(err)
 	}
 
-	return data
+	if includeEdge {
+		return data
+	}
+
+	var v []Fingerprints
+
+	for _, s := range data {
+		if !s.Edge {
+			v = append(v, s)
+		}
+	}
+
+	return v
 }
