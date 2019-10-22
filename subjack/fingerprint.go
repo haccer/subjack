@@ -13,6 +13,7 @@ type Fingerprints struct {
 	Cname       []string `json:"cname"`
 	Fingerprint []string `json:"fingerprint"`
 	Nxdomain    bool     `json:"nxdomain"`
+	Edge        bool     `json:"edge"`
 }
 
 /*

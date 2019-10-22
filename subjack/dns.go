@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Subdomain) dns(o *Options) {
-	config := fingerprints(o.Config)
+	config := fingerprints(o.Config, o.IncludeEdge)
 
 	if o.All {
 		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
