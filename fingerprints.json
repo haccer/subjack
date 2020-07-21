@@ -10,6 +10,14 @@
 		"nxdomain": false
 	},
 	{
+		"service": "elasticbeanstalk",
+		"cname": [
+			".elasticbeanstalk.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
 		"service": "agilecrm",
 		"cname": [
 			"agilecrm.com"
