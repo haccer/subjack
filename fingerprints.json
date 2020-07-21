@@ -18,6 +18,18 @@
 		"nxdomain": true
 	},
 	{
+		"service": "tilda_cc",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Domain has been assigned",
+			"Please go to the site settings",
+			"put the domain name in the Domain tab"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "agilecrm",
 		"cname": [
 			"agilecrm.com"
