@@ -350,6 +350,16 @@
 		"nxdomain": false
 	},
 	{
+		"service": "readthedocs",
+		"cname": [
+			"readthedocs.io"
+		],
+		"fingerprint": [
+			"is unknown to Read the Docs"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "apigee",
 		"cname": [
 			"-portal.apigee.net"
