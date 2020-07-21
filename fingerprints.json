@@ -10,6 +10,16 @@
 		"nxdomain": false
 	},
 	{
+		"service": "agilecrm",
+		"cname": [
+			"agilecrm.com"
+		],
+		"fingerprint": [
+			"this page is no longer available"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "github",
 		"cname": [
 			"github.io"
