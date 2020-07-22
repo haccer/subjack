@@ -412,6 +412,17 @@
 		"nxdomain": false
 	},
 	{
+		"service": "netlify",
+		"cname": [
+			"netlify.com"
+		],
+		"fingerprint":[
+			"Not Found"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
 		"service": "azure",
 		"cname": [
 			".azurewebsites.net",
