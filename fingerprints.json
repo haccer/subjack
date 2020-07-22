@@ -10,6 +10,41 @@
 		"nxdomain": false
 	},
 	{
+		"service": "cargo",
+		"cname": [
+			"cargo.site",
+			"cargocollective.com"
+		],
+		"fingerprint": [
+			"Once completed, this domain will automatically display your Cargo site",
+			"Connect it by adding it to your Settings",
+			"This domain has been configured for use by"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "anima",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"If this is your website and you",
+			"Missing Website"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "airee.ru",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Ошибка 402. Сервис Айри.рф не оплачен",
+			"did not pay for the Airi.rf service. Access to the site is temporarily unavailable"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "elasticbeanstalk",
 		"cname": [
 			".elasticbeanstalk.com"
@@ -126,6 +161,26 @@
 		],
 		"fingerprint": [
 			"The specified bucket does not exist"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "kinsta",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"No Site For Domain | Kinsta"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "launchrock",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"404 Not Found | Launchrock"
 		],
 		"nxdomain": false
 	},
@@ -290,6 +345,7 @@
 			"createsend.com"
 		],
 		"fingerprint": [
+			"Trying to access your account",
 			"Double check the URL or <a href=\"mailto:help@createsend.com"
 		],
 		"nxdomain": false
@@ -345,6 +401,17 @@
 		"nxdomain": false
 	},
 	{
+		"service": "mashery",
+		"cname": [
+			"mashery.com"
+		],
+		"fingerprint":[
+			"596 Service Not Found",
+			"Unrecognized domain"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "azure",
 		"cname": [
 			".azurewebsites.net",
@@ -358,6 +425,16 @@
 		],
 		"fingerprint": [],
 		"nxdomain": true
+	},
+	{
+		"service": "hatenablog",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Sorry, we can't find the page you're looking for. - Hatena Blog"
+		],
+		"nxdomain": false
 	},
 	{
 		"service": "zendesk",
