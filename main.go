@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	// "./subjack"
 	"github.com/haccer/subjack/subjack"
 )
 
