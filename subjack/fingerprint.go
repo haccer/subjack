@@ -88,11 +88,11 @@ func Identify(subdomain string, forceSSL, manual bool, timeout int, fingerprints
 	service = ""
 	nx := nxdomain(subdomain)
 
-	// Track whether a matching cname has been detected
-	foundcname := false
-
 IDENTIFY:
 	for f := range fingerprints {
+
+		// Track whether a matching cname has been detected
+		foundcname := false
 
 		// Begin subdomain checks if the subdomain returns NXDOMAIN
 		if nx || fingerprints[f].CheckAll {
@@ -116,7 +116,7 @@ IDENTIFY:
 			if fingerprints[f].Nxdomain || fingerprints[f].CheckAll {
 				for n := range fingerprints[f].Cname {
 					if strings.Contains(cname, fingerprints[f].Cname[n]) {
-						// Uncomment for Debugging: fmt.Printf("cname: %s, subdomain: %s, Found cname: %s\n", cname, fingerprints[f].Service, fingerprints[f].Cname)
+						//Uncomment for Debugging: fmt.Printf("cname: %s, subdomain: %s, Found cname: %s\n", cname, fingerprints[f].Service, fingerprints[f].Cname)
 						foundcname = true
 						if fingerprints[f].CheckAll {
 							// We must check if body contains matching fingerprint

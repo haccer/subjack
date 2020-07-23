@@ -165,6 +165,19 @@
 		"nxdomain": false
 	},
 	{
+		"service": "strikinglydns",
+		"cname": [
+			"strikinglydns.com"
+		],
+		"fingerprint": [
+			"Page not found - Strikingly",
+			"But if you're looking to build your own website",
+			"you've come to the right place"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
 		"service": "kinsta",
 		"cname": [
 			""
