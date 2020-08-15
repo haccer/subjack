@@ -524,5 +524,15 @@
 		],
 		"fingerprint": [],
 		"nxdomain": true
+	},
+	{
+		"service": "uberflip",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"The URL you've accessed does not provide a hub. Please check the URL and try again."
+		],
+		"nxdomain": false
 	}
 ]
