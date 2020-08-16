@@ -589,6 +589,18 @@
 			"This job board website is either expired or its domain name is invalid"
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "hubspot",
+		"cname": [
+			"hubspot.net"
+		],
+		"fingerprint": [
+			"This page isn’t available",
+			"does not exist in our system"
+		],
+		"nxdomain": false,
+		"checkall": true
 	}
 
 ]
