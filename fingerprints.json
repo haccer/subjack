@@ -579,6 +579,16 @@
 		],
 		"nxdomain": false,
 		"checkall": true
+	},
+	{
+		"service": "smartjobboard",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"This job board website is either expired or its domain name is invalid"
+		],
+		"nxdomain": false
 	}
 
 ]
