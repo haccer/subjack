@@ -364,5 +364,18 @@
 		],
 		"fingerprint": [],
 		"nxdomain": true
+	},
+	{
+		"service": "pingdom",
+		"cname": [
+			"stats.pingdom.com"
+		],
+		"fingerprint": [
+			"This could be because the account was cancelled",
+			"Sorry, couldn&rsquo;t find the status page",
+			"maybe you slipped over the keyboard"
+		],
+		"nxdomain": false,
+		"checkall": true
 	}
 ]
