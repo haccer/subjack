@@ -364,5 +364,16 @@
 		],
 		"fingerprint": [],
 		"nxdomain": true
+	},
+	{
+		"service": "gemfury",
+		"cname": [
+			"furyns.com"
+		],
+		"fingerprint": [
+			"https://gemfury.com/404"
+		],
+		"nxdomain": false,
+		"checkall": true
 	}
 ]
