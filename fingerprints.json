@@ -534,5 +534,16 @@
 			"The URL you've accessed does not provide a hub. Please check the URL and try again."
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "worksites.net",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Hello! Sorry, but the website you&rsquo;re looking for doesn&rsquo;t exist.</p>\n<a href=\"https://worksites.net/\">Learn more about Worksites.net"
+		],
+		"nxdomain": false
 	}
+
 ]
