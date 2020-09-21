@@ -6,16 +6,17 @@ import (
 )
 
 type Options struct {
-	Domain   string
-	Wordlist string
-	Threads  int
-	Timeout  int
-	Output   string
-	Ssl      bool
-	All      bool
-	Verbose  bool
-	Config   string
-	Manual   bool
+	Domain       string
+	Wordlist     string
+	Threads      int
+	Timeout      int
+	Output       string
+	Ssl          bool
+	All          bool
+	Verbose      bool
+	Config       string
+	Manual       bool
+	Fingerprints []Fingerprints
 }
 
 type Subdomain struct {
@@ -29,6 +30,7 @@ func Process(o *Options) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	o.Fingerprints = fingerprints(o.Config)
 
 	wg := new(sync.WaitGroup)
 
