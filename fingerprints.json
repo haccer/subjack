@@ -378,7 +378,7 @@
 	{
 		"service": "kickoffpages.com",
 		"cname": [
-			""
+			"kickofflabs.edgeapp.net"
 		],
 		"fingerprint": [
 			"Landing Page Not Found"
