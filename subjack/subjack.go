@@ -25,11 +25,21 @@ type Subdomain struct {
 
 /* Start processing subjack from the defined options. */
 func Process(o *Options) {
+	var list []string
+	var err error
+
 	urls := make(chan *Subdomain, o.Threads*10)
-	list, err := open(o.Wordlist)
+	
+	if(len(o.Domain) > 0){
+		list = append(list, o.Domain)
+	} else {
+		list, err = open(o.Wordlist)
+	}
+		
 	if err != nil {
 		log.Fatalln(err)
 	}
+	
 	o.Fingerprints = fingerprints(o.Config)
 
 	wg := new(sync.WaitGroup)
