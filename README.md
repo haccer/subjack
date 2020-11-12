@@ -27,6 +27,7 @@ Examples:
 - `./subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl`
 
 Options:
+- `-d test.com` if you want to test a single domain.
 - `-w domains.txt` is your list of subdomains.
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
