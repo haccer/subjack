@@ -320,6 +320,14 @@
 		"nxdomain": false
 	},
 	{
+		"service": "ssl-zendesk",
+		"cname": [
+			".ssl.zendesk.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
 		"service": "readme",
 		"cname": [
 			"readme.io"
