@@ -354,5 +354,16 @@
 			"Hello! Sorry, but the website you&rsquo;re looking for doesn&rsquo;t exist.</p>\n<a href=\"https://worksites.net/\">Learn more about Worksites.net"
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "kickoffpages.com",
+		"cname": [
+			"kickofflabs.edgeapp.net"
+		],
+		"fingerprint": [
+			"Landing Page Not Found"
+		],
+		"nxdomain": false
 	}
+	
 ]
