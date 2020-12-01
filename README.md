@@ -27,6 +27,7 @@ Examples:
 - `./subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl`
 
 Options:
+- `-d test.com` if you want to test a single domain.
 - `-w domains.txt` is your list of subdomains.
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
@@ -64,7 +65,7 @@ func main() {
 	subdomain := "dead.cody.su"
 	/* Use subjack's advanced detection to identify 
 	if the subdomain is able to be taken over. */
-	service := subjack.Identify(subdomain, false, 10, fingerprints)
+	service := subjack.Identify(subdomain, false, false, 10, fingerprints)
 
 	if service != "" {
 		service = strings.ToLower(service)
