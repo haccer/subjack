@@ -354,5 +354,15 @@
 			"Hello! Sorry, but the website you&rsquo;re looking for doesn&rsquo;t exist.</p>\n<a href=\"https://worksites.net/\">Learn more about Worksites.net"
 		],
 		"nxdomain": false
+	},
+	{
+			"service": "vercel",
+			"cname": [
+					""
+			],
+			"fingerprint": [
+					"The deployment could not be found on Vercel."
+			],
+			"nxdomain": false
 	}
 ]
