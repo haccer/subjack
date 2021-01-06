@@ -28,7 +28,7 @@ Examples:
 
 Options:
 - `-d test.com` if you want to test a single domain.
-- `-w domains.txt` is your list of subdomains.
+- `-w subdomains.txt` is your list of subdomains.
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
 - `-o results.txt` where to save results to. For JSON: `-o results.json`
