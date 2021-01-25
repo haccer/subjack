@@ -24,6 +24,7 @@ Requires [Go](https://golang.org/dl/)
 ## How To Use:
 
 Examples: 
+- `go build`
 - `./subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl`
 
 Options:
