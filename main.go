@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
+	"math/rand"
 
 	"github.com/haccer/subjack/subjack"
 )
@@ -26,6 +28,7 @@ func main() {
 	flag.StringVar(&o.Output, "o", "", "Output results to file (Subjack will write JSON if file ends with '.json').")
 	flag.StringVar(&o.Config, "c", defaultConfig, "Path to configuration file.")
 	flag.BoolVar(&o.Manual, "m", false, "Flag the presence of a dead record, but valid CNAME entry.")
+	flag.StringVar(&o.Resolverlist, "r", "", "Path to resolvers list.")
 
 	flag.Parse()
 
@@ -38,6 +41,8 @@ func main() {
 		flag.Usage()
 		os.Exit(1)
 	}
+
+	rand.Seed(time.Now().UnixNano())
 
 	subjack.Process(&o)
 }

@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"net"
 	"strings"
+	"math/rand"
 
 	"github.com/haccer/available"
 	"github.com/miekg/dns"
 )
 
-func (s *Subdomain) dns(o *Options) {
+func (s *Subdomain) dns(o *Options, resolvers []string) {
 	config := o.Fingerprints
 
 	if o.All {
-		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
+		detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, resolvers, config)
 	} else {
-		if VerifyCNAME(s.Url, config) {
-			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, config)
+		if VerifyCNAME(s.Url, config, resolvers) {
+			detect(s.Url, o.Output, o.Ssl, o.Verbose, o.Manual, o.Timeout, resolvers, config)
 		}
 
 		if o.Verbose {
@@ -36,13 +37,24 @@ func (s *Subdomain) dns(o *Options) {
 	}
 }
 
-func resolve(url string) (cname string) {
+func resolve(url string, resolvers []string) (cname string) {
 	cname = ""
 	d := new(dns.Msg)
 	d.SetQuestion(url+".", dns.TypeCNAME)
-	ret, err := dns.Exchange(d, "8.8.8.8:53")
-	if err != nil {
-		return
+
+	default_resolver := "8.8.8.8:53"
+	resolver := default_resolver
+	if (len(resolvers) > 0) {
+		resolver = fmt.Sprintf("%s:53", resolvers[rand.Intn(len(resolvers))])
+	}
+
+	ret, err := dns.Exchange(d, resolver)
+	if err != nil && resolver != default_resolver {
+		// retry again with the default resolver
+		ret, err = dns.Exchange(d, default_resolver)
+		if  err != nil {
+			return
+		}
 	}
 
 	for _, a := range ret.Answer {
@@ -54,12 +66,23 @@ func resolve(url string) (cname string) {
 	return cname
 }
 
-func nslookup(domain string) (nameservers []string) {
+func nslookup(domain string, resolvers []string) (nameservers []string) {
 	m := new(dns.Msg)
 	m.SetQuestion(dotDomain(domain), dns.TypeNS)
-	ret, err := dns.Exchange(m, "8.8.8.8:53")
-	if err != nil {
-		return
+
+	default_resolver := "8.8.8.8:53"
+	resolver := default_resolver
+	if (len(resolvers) > 0) {
+		resolver = fmt.Sprintf("%s:53", resolvers[rand.Intn(len(resolvers))])
+	}
+
+	ret, err := dns.Exchange(m, resolver)
+	if err != nil && resolver != default_resolver {
+		// retry again with the default resolver
+		ret, err = dns.Exchange(m, default_resolver)
+		if  err != nil {
+			return
+		}
 	}
 
 	nameservers = []string{}
@@ -83,8 +106,8 @@ func nxdomain(nameserver string) bool {
 	return false
 }
 
-func NS(domain, output string, verbose bool) {
-	nameservers := nslookup(domain)
+func NS(domain, output string, verbose bool, resolvers []string) {
+	nameservers := nslookup(domain, resolvers)
 	for _, ns := range nameservers {
 		if verbose {
 			msg := fmt.Sprintf("[*] %s: Nameserver is %s\n", domain, ns)

@@ -29,6 +29,7 @@ Examples:
 Options:
 - `-d test.com` if you want to test a single domain.
 - `-w domains.txt` is your list of subdomains.
+- `-r resolvers.txt` is your list of dns resolvers.
 - `-t` is the number of threads (Default: 10 threads). 
 - `-timeout` is the seconds to wait before timeout connection (Default: 10 seconds).
 - `-o results.txt` where to save results to. For JSON: `-o results.json`
@@ -90,6 +91,13 @@ dev.cody.su
 dev2.twitter.com
 ```
 
+**Q:** What should my resolvers list look like?
+
+**A:** Your resolvers list should include a list of dns resolvers. For a list of resolvers you can check [https://public-dns.info/nameservers.txt](https://public-dns.info/nameservers.txt):
+```
+8.8.8.8
+8.8.4.4
+```
 ## References
 Extra information about Hostile Subdomain Takeovers:
 
