@@ -17,6 +17,7 @@ type Options struct {
 	Config       string
 	Manual       bool
 	Fingerprints []Fingerprints
+	Resolverlist string
 }
 
 type Subdomain struct {
@@ -26,6 +27,7 @@ type Subdomain struct {
 /* Start processing subjack from the defined options. */
 func Process(o *Options) {
 	var list []string
+	var resolvers []string
 	var err error
 
 	urls := make(chan *Subdomain, o.Threads*10)
@@ -35,11 +37,18 @@ func Process(o *Options) {
 	} else {
 		list, err = open(o.Wordlist)
 	}
-		
+
 	if err != nil {
 		log.Fatalln(err)
 	}
-	
+
+	if(len(o.Resolverlist) > 0){
+		resolvers, err = open(o.Resolverlist)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 	o.Fingerprints = fingerprints(o.Config)
 
 	wg := new(sync.WaitGroup)
@@ -48,7 +57,7 @@ func Process(o *Options) {
 		wg.Add(1)
 		go func() {
 			for url := range urls {
-				url.dns(o)
+				url.dns(o, resolvers)
 			}
 
 			wg.Done()
