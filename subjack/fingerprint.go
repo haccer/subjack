@@ -13,6 +13,7 @@ type Fingerprints struct {
 	Cname       []string `json:"cname"`
 	Fingerprint []string `json:"fingerprint"`
 	Nxdomain    bool     `json:"nxdomain"`
+	CheckAll    bool     `json:"checkall"`
 }
 
 /*
@@ -90,8 +91,13 @@ func Identify(subdomain string, forceSSL, manual bool, timeout int, fingerprints
 IDENTIFY:
 	for f := range fingerprints {
 
-		// Begin subdomain checks if the subdomain returns NXDOMAIN
-		if nx {
+		// Track whether a matching cname has been detected
+		foundcname := false
+
+		// Begin subdomain checks if the subdomain returns NXDOMAIN OR we need
+		// to perform both CNAME and findgerpint checks
+		if nx || fingerprints[f].CheckAll {
+			// Uncomment for Debugging: fmt.Printf("f: %d, fingerprints[f].Service: %s, fingerprints[f].CheckAll: %t\n", f, fingerprints[f].Service, fingerprints[f].CheckAll)
 
 			// Check if we can register this domain.
 			dead := available.Domain(cname)
@@ -100,28 +106,42 @@ IDENTIFY:
 				break IDENTIFY
 			}
 
-			// Check if subdomain matches fingerprinted cname
-			if fingerprints[f].Nxdomain {
-				for n := range fingerprints[f].Cname {
-					if strings.Contains(cname, fingerprints[f].Cname[n]) {
-						service = strings.ToUpper(fingerprints[f].Service)
-						break IDENTIFY
-					}
-				}
-			}
-
 			// Option to always print the CNAME and not check if it's available to be registered.
 			if manual && !dead && cname != "" {
 				service = "DEAD DOMAIN - " + cname
 				break IDENTIFY
 			}
+
+			// Check if subdomain matches fingerprinted cname (when NX OR
+			// if user requests to check ALL fingerprints)
+			if fingerprints[f].Nxdomain || fingerprints[f].CheckAll {
+				for n := range fingerprints[f].Cname {
+					if strings.Contains(cname, fingerprints[f].Cname[n]) {
+						//Uncomment for Debugging: fmt.Printf("cname: %s, subdomain: %s, Found cname: %s\n", cname, fingerprints[f].Service, fingerprints[f].Cname)
+						foundcname = true
+						if fingerprints[f].CheckAll {
+							// Now, we must also check if body contains matching fingerprint
+							break
+						} else {
+							// Found matching cname as per fingerprint for NX
+							// Successfully found a match
+							service = strings.ToUpper(fingerprints[f].Service)
+							break IDENTIFY
+						}
+					}
+				}
+			}
 		}
 
-		// Check if body matches fingerprinted response
-		for n := range fingerprints[f].Fingerprint {
-			if bytes.Contains(body, []byte(fingerprints[f].Fingerprint[n])) {
-				service = strings.ToUpper(fingerprints[f].Service)
-				break
+		// Check the fingerprint for body if we found a mathcing cname when all
+		// checks must match OR if nxdomain for fingerprint set to false
+		if (fingerprints[f].CheckAll && foundcname) || (!fingerprints[f].CheckAll && !fingerprints[f].Nxdomain) {
+			// Check if body matches fingerprinted response
+			for n := range fingerprints[f].Fingerprint {
+				if bytes.Contains(body, []byte(fingerprints[f].Fingerprint[n])) {
+					service = strings.ToUpper(fingerprints[f].Service)
+					break
+				}
 			}
 		}
 	}

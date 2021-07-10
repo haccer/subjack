@@ -10,6 +10,71 @@
 		"nxdomain": false
 	},
 	{
+		"service": "cargo",
+		"cname": [
+			"cargo.site",
+			"cargocollective.com"
+		],
+		"fingerprint": [
+			"Once completed, this domain will automatically display your Cargo site",
+			"Connect it by adding it to your Settings",
+			"This domain has been configured for use by"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "anima",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"If this is your website and you",
+			"Missing Website"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "airee.ru",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Ошибка 402. Сервис Айри.рф не оплачен",
+			"did not pay for the Airi.rf service. Access to the site is temporarily unavailable"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "elasticbeanstalk",
+		"cname": [
+			".elasticbeanstalk.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "tilda_cc",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Domain has been assigned",
+			"Please go to the site settings",
+			"put the domain name in the Domain tab"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "agilecrm",
+		"cname": [
+			"agilecrm.com"
+		],
+		"fingerprint": [
+			"this page is no longer available"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "github",
 		"cname": [
 			"github.io"
@@ -48,6 +113,17 @@
 			"Whatever you were looking for doesn't currently exist at this address."
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "uptimerobot",
+		"cname": [
+			"uptimerobot.com"
+		],
+		"fingerprint": [
+			"page not found"
+		],
+		"nxdomain": false,
+		"checkall": true
 	},
 	{
 		"service": "wordpress",
@@ -96,6 +172,39 @@
 		],
 		"fingerprint": [
 			"The specified bucket does not exist"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "strikinglydns",
+		"cname": [
+			"strikinglydns.com"
+		],
+		"fingerprint": [
+			"Page not found - Strikingly",
+			"But if you're looking to build your own website",
+			"you've come to the right place"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
+		"service": "kinsta",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"No Site For Domain | Kinsta"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "launchrock",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"404 Not Found | Launchrock"
 		],
 		"nxdomain": false
 	},
@@ -230,7 +339,7 @@
 			"bigcartel.com"
 		],
 		"fingerprint": [
-			"<h1>Oops! We could&#8217;t find that page.</h1>"
+			"<h1>Oops! We couldn&#8217;t find that page.</h1>"
 		],
 		"nxdomain": false
 	},
@@ -240,6 +349,7 @@
 			"createsend.com"
 		],
 		"fingerprint": [
+			"Trying to access your account",
 			"Double check the URL or <a href=\"mailto:help@createsend.com"
 		],
 		"nxdomain": false
@@ -295,6 +405,40 @@
 		"nxdomain": false
 	},
 	{
+		"service": "mashery",
+		"cname": [
+			"mashery.com"
+		],
+		"fingerprint":[
+			"596 Service Not Found",
+			"Unrecognized domain"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "netlify",
+		"cname": [
+			"netlify.com"
+		],
+		"fingerprint":[
+			"Not Found"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+    {
+		"service": "discourse",
+		"cname": [
+			"trydiscourse.com"
+		],
+		"fingerprint":[
+			"Sorry, the site you are looking for does not exist",
+            "Are you sure you typed in the address correctly?"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
 		"service": "azure",
 		"cname": [
 			".azurewebsites.net",
@@ -310,6 +454,16 @@
 		"nxdomain": true
 	},
 	{
+		"service": "hatenablog",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"Sorry, we can't find the page you're looking for. - Hatena Blog"
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "zendesk",
 		"cname": [
 			"zendesk.com"
@@ -320,12 +474,30 @@
 		"nxdomain": false
 	},
 	{
+		"service": "ssl-zendesk",
+		"cname": [
+			".ssl.zendesk.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
 		"service": "readme",
 		"cname": [
 			"readme.io"
 		],
 		"fingerprint": [
 			"Project doesnt exist... yet!"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "readthedocs",
+		"cname": [
+			"readthedocs.io"
+		],
+		"fingerprint": [
+			"is unknown to Read the Docs"
 		],
 		"nxdomain": false
 	},
@@ -346,6 +518,16 @@
 		"nxdomain": true
 	},
 	{
+		"service": "uberflip",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"The URL you've accessed does not provide a hub. Please check the URL and try again."
+		],
+		"nxdomain": false
+	},
+	{
 		"service": "worksites.net",
 		"cname": [
 			""
@@ -354,5 +536,64 @@
 			"Hello! Sorry, but the website you&rsquo;re looking for doesn&rsquo;t exist.</p>\n<a href=\"https://worksites.net/\">Learn more about Worksites.net"
 		],
 		"nxdomain": false
+	},
+	{
+		"service": "gemfury",
+		"cname": [
+			"furyns.com"
+		],
+		"fingerprint": [
+			"https://gemfury.com/404"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
+		"service": "pingdom",
+		"cname": [
+			"stats.pingdom.com"
+		],
+		"fingerprint": [
+			"This could be because the account was cancelled",
+			"Sorry, couldn&rsquo;t find the status page",
+			"maybe you slipped over the keyboard"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
+		"service": "ngrok",
+		"cname": [
+			"ngrok.io"
+		],
+		"fingerprint": [
+			" not found"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
+	{
+		"service": "smartjobboard",
+		"cname": [
+			""
+		],
+		"fingerprint": [
+			"This job board website is either expired or its domain name is invalid"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "hubspot",
+		"cname": [
+			"hubspot.net"
+		],
+		"fingerprint": [
+			"This page isn’t available",
+			"does not exist in our system"
+		],
+		"nxdomain": false,
+		"checkall": true
 	}
+
 ]
+
