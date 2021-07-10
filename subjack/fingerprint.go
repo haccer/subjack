@@ -94,7 +94,8 @@ IDENTIFY:
 		// Track whether a matching cname has been detected
 		foundcname := false
 
-		// Begin subdomain checks if the subdomain returns NXDOMAIN
+		// Begin subdomain checks if the subdomain returns NXDOMAIN OR we need
+		// to perform both CNAME and findgerpint checks
 		if nx || fingerprints[f].CheckAll {
 			// Uncomment for Debugging: fmt.Printf("f: %d, fingerprints[f].Service: %s, fingerprints[f].CheckAll: %t\n", f, fingerprints[f].Service, fingerprints[f].CheckAll)
 
@@ -111,18 +112,18 @@ IDENTIFY:
 				break IDENTIFY
 			}
 
-			// Check if subdomain matches fingerprinted cname for NXDomain AND
-			// if user requests to check ALL fingerprints
+			// Check if subdomain matches fingerprinted cname (when NX OR
+			// if user requests to check ALL fingerprints)
 			if fingerprints[f].Nxdomain || fingerprints[f].CheckAll {
 				for n := range fingerprints[f].Cname {
 					if strings.Contains(cname, fingerprints[f].Cname[n]) {
 						//Uncomment for Debugging: fmt.Printf("cname: %s, subdomain: %s, Found cname: %s\n", cname, fingerprints[f].Service, fingerprints[f].Cname)
 						foundcname = true
 						if fingerprints[f].CheckAll {
-							// We must check if body contains matching fingerprint
+							// Now, we must also check if body contains matching fingerprint
 							break
 						} else {
-							// Found matching cname as per fingerprint for NXDomain
+							// Found matching cname as per fingerprint for NX
 							// Successfully found a match
 							service = strings.ToUpper(fingerprints[f].Service)
 							break IDENTIFY

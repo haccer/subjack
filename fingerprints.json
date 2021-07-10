@@ -426,6 +426,18 @@
 		"nxdomain": false,
 		"checkall": true
 	},
+    {
+		"service": "discourse",
+		"cname": [
+			"trydiscourse.com"
+		],
+		"fingerprint":[
+			"Sorry, the site you are looking for does not exist",
+            "Are you sure you typed in the address correctly?"
+		],
+		"nxdomain": false,
+		"checkall": true
+	},
 	{
 		"service": "azure",
 		"cname": [
