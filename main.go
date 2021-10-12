@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go/build"
 	"os"
 
 	"github.com/haccer/subjack/subjack"
 )
 
 func main() {
-	GOPATH := os.Getenv("GOPATH")
+	GOPATH := build.Default.GOPATH
 	Project := "/src/github.com/haccer/subjack/"
 	configFile := "fingerprints.json"
 	defaultConfig := GOPATH + Project + configFile
