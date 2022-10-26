@@ -1,7 +1,6 @@
 package subjack
 
 import (
-	"log"
 	"sync"
 )
 
@@ -15,6 +14,7 @@ type Options struct {
 	All          bool
 	Verbose      bool
 	Config       string
+	ConfigFile   string
 	Manual       bool
 	Fingerprints []Fingerprints
 }
@@ -24,23 +24,37 @@ type Subdomain struct {
 }
 
 /* Start processing subjack from the defined options. */
-func Process(o *Options) {
+func Process(o *Options) (err error) {
 	var list []string
-	var err error
 
 	urls := make(chan *Subdomain, o.Threads*10)
-	
-	if(len(o.Domain) > 0){
+
+	// Load fingerprints
+	if o.ConfigFile != "" {
+		custom_fingerprints, err := readFile(o.ConfigFile)
+		if err != nil {
+			return err
+		}
+		o.Fingerprints, err = fingerprints(custom_fingerprints)
+		if err != nil {
+			return err
+		}
+	} else {
+		// No error checking here because the default fingerprints are
+		// hard-coded into the binary.
+		o.Fingerprints, _ = fingerprints([]byte(o.Config))
+	}
+
+	// Load domain list
+	if len(o.Domain) > 0 {
 		list = append(list, o.Domain)
 	} else {
-		list, err = open(o.Wordlist)
+		list, err = readFileLines(o.Wordlist)
 	}
-		
+
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
-	
-	o.Fingerprints = fingerprints(o.Config)
 
 	wg := new(sync.WaitGroup)
 
@@ -61,4 +75,5 @@ func Process(o *Options) {
 
 	close(urls)
 	wg.Wait()
+	return nil
 }

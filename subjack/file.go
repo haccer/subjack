@@ -3,7 +3,7 @@ package subjack
 import (
 	"bufio"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -14,23 +14,6 @@ type Results struct {
 	Vulnerable bool   `json:"vulnerable"`
 	Service    string `json:"service,omitempty"`
 	Domain     string `json:"nonexist_domain,omitempty"`
-}
-
-func open(path string) (lines []string, Error error) {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	return lines, scanner.Err()
 }
 
 func chkJSON(output string) (json bool) {
@@ -90,7 +73,7 @@ func writeJSON(service, url, output string) {
 
 	defer f.Close()
 
-	file, err := ioutil.ReadAll(f)
+	file, err := io.ReadAll(f)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -111,16 +94,28 @@ func writeJSON(service, url, output string) {
 	wf.Write(results)
 }
 
-func fingerprints(file string) (data []Fingerprints) {
-	config, err := ioutil.ReadFile(file)
+func readFile(filename string) (content []byte, Error error) {
+	return os.ReadFile(filename)
+}
+
+func readFileLines(filename string) (lines []string, Error error) {
+	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
-	err = json.Unmarshal(config, &data)
-	if err != nil {
-		log.Fatalln(err)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
 	}
 
-	return data
+	return lines, scanner.Err()
+}
+
+func fingerprints(config []byte) (data []Fingerprints, Error error) {
+	err := json.Unmarshal(config, &data)
+	return data, err
 }
