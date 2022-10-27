@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"os"
@@ -8,12 +9,10 @@ import (
 	"github.com/haccer/subjack/subjack"
 )
 
-func main() {
-	GOPATH := os.Getenv("GOPATH")
-	Project := "/src/github.com/haccer/subjack/"
-	configFile := "fingerprints.json"
-	defaultConfig := GOPATH + Project + configFile
+//go:embed fingerprints.json
+var defaultConfig string
 
+func main() {
 	o := subjack.Options{}
 
 	flag.StringVar(&o.Domain, "d", "", "Domain.")
@@ -24,7 +23,7 @@ func main() {
 	flag.BoolVar(&o.All, "a", false, "Find those hidden gems by sending requests to every URL. (Default: Requests are only sent to URLs with identified CNAMEs).")
 	flag.BoolVar(&o.Verbose, "v", false, "Display more information per each request.")
 	flag.StringVar(&o.Output, "o", "", "Output results to file (Subjack will write JSON if file ends with '.json').")
-	flag.StringVar(&o.Config, "c", defaultConfig, "Path to configuration file.")
+	flag.StringVar(&o.ConfigFile, "c", "", "Path to configuration file.")
 	flag.BoolVar(&o.Manual, "m", false, "Flag the presence of a dead record, but valid CNAME entry.")
 
 	flag.Parse()
@@ -39,5 +38,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	subjack.Process(&o)
+	o.Config = defaultConfig
+	err := subjack.Process(&o)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
