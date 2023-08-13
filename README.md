@@ -20,6 +20,7 @@ Subjack will also check for subdomains attached to domains that don't exist (NXD
 Requires [Go](https://golang.org/dl/)
 
 `go get github.com/haccer/subjack`
+`go install github.com/haccer/subjack@latest`
 
 ## How To Use:
 
