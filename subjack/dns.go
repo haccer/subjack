@@ -1,10 +1,12 @@
 package subjack
 
 import (
+	"context"
 	"fmt"
 	"math/rand/v2"
 	"net"
 	"strings"
+	"time"
 
 	"github.com/haccer/available"
 	"github.com/miekg/dns"
@@ -80,7 +82,9 @@ func lookupNS(domain string, resolvers []string) []string {
 }
 
 func isNXDOMAIN(host string) bool {
-	_, err := net.LookupHost(host)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_, err := net.DefaultResolver.LookupHost(ctx, host)
 	if err != nil {
 		return strings.Contains(err.Error(), "no such host")
 	}
