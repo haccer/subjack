@@ -1,5 +1,7 @@
 # Binaries
-subjack
+# Ignore the built binary, not the subjack/ source directory
+/subjack
+!/subjack/
 *.exe
 *.exe~
 *.dll
