@@ -48,21 +48,26 @@ func printResult(service, url string, o *Options) {
 	if service != "" {
 		colored := colorGreen + service + colorReset
 		fmt.Printf("[%s] %s\n", colored, url)
-
-		if o.Output != "" {
-			plain := fmt.Sprintf("[%s] %s\n", service, url)
-			writeOutput(service, url, plain, o.Output)
-		}
-		return
+	} else if o.Verbose {
+		fmt.Printf("[%sNot Vulnerable%s] %s\n", colorRed, colorReset, url)
 	}
 
-	if o.Verbose {
-		fmt.Printf("[%sNot Vulnerable%s] %s\n", colorRed, colorReset, url)
-
-		if o.Output != "" {
+	if o.Output != "" {
+		if service != "" {
+			plain := fmt.Sprintf("[%s] %s\n", service, url)
+			writeOutput(service, url, plain, o.Output)
+		} else {
 			plain := fmt.Sprintf("[Not Vulnerable] %s\n", url)
 			writeOutput("", url, plain, o.Output)
 		}
+	}
+}
+
+func initOutput(path string) {
+	if strings.HasSuffix(path, ".json") {
+		os.WriteFile(path, []byte("[]"), 0600)
+	} else {
+		os.WriteFile(path, nil, 0600)
 	}
 }
 

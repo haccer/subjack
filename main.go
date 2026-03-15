@@ -29,7 +29,10 @@ func main() {
 
 	flag.Parse()
 
-	if flag.NFlag() == 0 {
+	stat, _ := os.Stdin.Stat()
+	o.Stdin = (stat.Mode() & os.ModeCharDevice) == 0
+
+	if flag.NFlag() == 0 && !o.Stdin {
 		flag.Usage()
 		os.Exit(1)
 	}

@@ -1,7 +1,9 @@
 package subjack
 
 import (
+	"bufio"
 	"log"
+	"os"
 	"sync"
 )
 
@@ -16,6 +18,7 @@ type Options struct {
 	Verbose      bool
 	Manual       bool
 	ResolverList string
+	Stdin        bool
 	fingerprints []Fingerprint
 	resolvers    []string
 }
@@ -26,15 +29,18 @@ func Process(o *Options) {
 
 	if len(o.Domain) > 0 {
 		list = append(list, o.Domain)
-	} else {
+	} else if o.Wordlist != "" {
 		list, err = readLines(o.Wordlist)
-	}
-
-	if err != nil {
-		log.Fatalln(err)
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 
 	o.fingerprints = loadFingerprints()
+
+	if o.Output != "" {
+		initOutput(o.Output)
+	}
 
 	if o.ResolverList != "" {
 		o.resolvers, err = readLines(o.ResolverList)
@@ -56,8 +62,15 @@ func Process(o *Options) {
 		}()
 	}
 
-	for _, u := range list {
-		urls <- u
+	if o.Stdin {
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			urls <- scanner.Text()
+		}
+	} else {
+		for _, u := range list {
+			urls <- u
+		}
 	}
 
 	close(urls)
