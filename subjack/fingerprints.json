@@ -10,16 +10,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "heroku",
-		"cname": [
-			"herokuapp"
-		],
-		"fingerprint": [
-			"herokucdn.com/error-pages/no-such-app.html"
-		],
-		"nxdomain": false
-	},
-	{
 		"service": "pantheon",
 		"cname": [
 			"pantheonsite.io"
