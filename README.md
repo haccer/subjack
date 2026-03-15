@@ -1,7 +1,5 @@
 # subjack
 
-[![Build Status](https://api.travis-ci.org/haccer/subjack.svg?branch=master)](https://travis-ci.org/haccer/subjack) 
-[![Build status](https://ci.appveyor.com/api/projects/status/dm8f2yyjcbn3j1cm?svg=true&passingText=Windows%20-%20OK&failingText=Windows%20-%20failed&pendingText=Windows%20-%20pending)](https://ci.appveyor.com/project/haccer/subjack) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/haccer/subjack)](https://goreportcard.com/report/github.com/haccer/subjack) 
 [![GoDoc](https://godoc.org/github.com/haccer/subjack/subjack?status.svg)](http://godoc.org/github.com/haccer/subjack/subjack) 
 [![GitHub license](https://img.shields.io/github/license/haccer/subjack.svg)](https://github.com/haccer/subjack/blob/master/LICENSE)
