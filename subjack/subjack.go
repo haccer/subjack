@@ -15,7 +15,9 @@ type Options struct {
 	All          bool
 	Verbose      bool
 	Manual       bool
+	ResolverList string
 	fingerprints []Fingerprint
+	resolvers    []string
 }
 
 func Process(o *Options) {
@@ -33,6 +35,13 @@ func Process(o *Options) {
 	}
 
 	o.fingerprints = loadFingerprints()
+
+	if o.ResolverList != "" {
+		o.resolvers, err = readLines(o.ResolverList)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
 
 	urls := make(chan string, o.Threads*10)
 	wg := new(sync.WaitGroup)

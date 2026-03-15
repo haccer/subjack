@@ -38,6 +38,7 @@ subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
 | `-ssl` | Force HTTPS connections (may increase accuracy) | `false` |
 | `-a` | Send requests to every URL, not just those with identified CNAMEs **(recommended)** | `false` |
 | `-m` | Flag dead CNAME records even if the domain is not available for registration | `false` |
+| `-r` | Path to a list of DNS resolvers (one IP per line, falls back to `8.8.8.8` on failure) | |
 | `-v` | Display more information per request | `false` |
 
 ## Practical Use

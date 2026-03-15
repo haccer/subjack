@@ -14,9 +14,9 @@ type Fingerprint struct {
 	Nxdomain    bool     `json:"nxdomain"`
 }
 
-func verifyCNAME(subdomain string, fingerprints []Fingerprint) bool {
-	cname := resolveCNAME(subdomain)
-	for _, fp := range fingerprints {
+func verifyCNAME(subdomain string, o *Options) bool {
+	cname := resolveCNAME(subdomain, o.resolvers)
+	for _, fp := range o.fingerprints {
 		for _, c := range fp.Cname {
 			if strings.Contains(cname, c) {
 				return true
@@ -32,7 +32,7 @@ func detect(url string, o *Options) {
 }
 
 func identify(subdomain string, o *Options) string {
-	cname := resolveCNAME(subdomain)
+	cname := resolveCNAME(subdomain, o.resolvers)
 	if len(cname) <= 3 {
 		cname = ""
 	}

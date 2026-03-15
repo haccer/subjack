@@ -19,6 +19,7 @@ func main() {
 	flag.BoolVar(&o.All, "a", false, "Send requests to every URL, not just those with identified CNAMEs.")
 	flag.BoolVar(&o.Verbose, "v", false, "Display more information per request.")
 	flag.StringVar(&o.Output, "o", "", "Output results to file (use .json extension for JSON output).")
+	flag.StringVar(&o.ResolverList, "r", "", "Path to a list of DNS resolvers.")
 	flag.BoolVar(&o.Manual, "m", false, "Flag dead CNAME records even if the domain is not available for registration.")
 
 	flag.Usage = func() {
