@@ -1,15 +1,5 @@
 [
 	{
-		"service": "fastly",
-		"cname": [
-			"fastly"
-		],
-		"fingerprint": [
-			"Fastly error: unknown domain"
-		],
-		"nxdomain": false
-	},
-	{
 		"service": "github",
 		"cname": [
 			"github.io"
