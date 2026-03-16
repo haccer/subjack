@@ -3,6 +3,7 @@ package subjack
 import (
 	"bytes"
 	"strings"
+	"time"
 
 	"github.com/haccer/available"
 )
@@ -15,7 +16,7 @@ type Fingerprint struct {
 }
 
 func verifyCNAME(subdomain string, o *Options) bool {
-	cname := resolveCNAME(subdomain, o.resolvers)
+	cname := resolveCNAME(subdomain, o)
 	for _, fp := range o.fingerprints {
 		for _, c := range fp.Cname {
 			if strings.Contains(cname, c) {
@@ -32,12 +33,12 @@ func detect(url string, o *Options) {
 }
 
 func identify(subdomain string, o *Options) string {
-	cname := resolveCNAME(subdomain, o.resolvers)
+	cname := resolveCNAME(subdomain, o)
 	if len(cname) <= 3 {
 		cname = ""
 	}
 
-	if isNXDOMAIN(subdomain) {
+	if isNXDOMAIN(subdomain, time.Duration(o.Timeout)*time.Second) {
 		if available.Domain(cname) {
 			return "DOMAIN AVAILABLE - " + cname
 		}

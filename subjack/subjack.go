@@ -17,10 +17,12 @@ type Options struct {
 	All          bool
 	Verbose      bool
 	Manual       bool
+	CheckNS      bool
 	ResolverList string
 	Stdin        bool
 	fingerprints []Fingerprint
 	resolvers    []string
+	sem          chan struct{}
 }
 
 func Process(o *Options) {
@@ -48,6 +50,8 @@ func Process(o *Options) {
 			log.Fatalln(err)
 		}
 	}
+
+	o.sem = make(chan struct{}, o.Threads)
 
 	urls := make(chan string, o.Threads*10)
 	wg := new(sync.WaitGroup)

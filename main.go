@@ -21,6 +21,7 @@ func main() {
 	flag.StringVar(&o.Output, "o", "", "Output results to file (use .json extension for JSON output).")
 	flag.StringVar(&o.ResolverList, "r", "", "Path to a list of DNS resolvers.")
 	flag.BoolVar(&o.Manual, "m", false, "Flag dead CNAME records even if the domain is not available for registration.")
+	flag.BoolVar(&o.CheckNS, "ns", false, "Check if nameservers are available for purchase (NS takeover).")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n\nOptions:\n", os.Args[0])

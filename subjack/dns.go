@@ -21,16 +21,24 @@ func pickResolver(resolvers []string) string {
 	return resolvers[rand.IntN(len(resolvers))] + ":53"
 }
 
-func dnsExchange(msg *dns.Msg, resolvers []string) (*dns.Msg, error) {
+func dnsExchange(msg *dns.Msg, resolvers []string, timeout time.Duration) (*dns.Msg, error) {
+	client := &dns.Client{Timeout: timeout}
 	resolver := pickResolver(resolvers)
-	resp, err := dns.Exchange(msg, resolver)
+	resp, _, err := client.Exchange(msg, resolver)
 	if err != nil && resolver != defaultResolver {
-		resp, err = dns.Exchange(msg, defaultResolver)
+		resp, _, err = client.Exchange(msg, defaultResolver)
 	}
 	return resp, err
 }
 
 func check(url string, o *Options) {
+	o.sem <- struct{}{}
+	defer func() { <-o.sem }()
+
+	if o.CheckNS {
+		checkNS(url, o)
+	}
+
 	if o.All {
 		detect(url, o)
 		return
@@ -46,10 +54,10 @@ func check(url string, o *Options) {
 	}
 }
 
-func resolveCNAME(domain string, resolvers []string) string {
+func resolveCNAME(domain string, o *Options) string {
 	msg := new(dns.Msg)
 	msg.SetQuestion(domain+".", dns.TypeCNAME)
-	resp, err := dnsExchange(msg, resolvers)
+	resp, err := dnsExchange(msg, o.resolvers, time.Duration(o.Timeout)*time.Second)
 	if err != nil {
 		return ""
 	}
@@ -63,10 +71,10 @@ func resolveCNAME(domain string, resolvers []string) string {
 	return ""
 }
 
-func lookupNS(domain string, resolvers []string) []string {
+func lookupNS(domain string, o *Options) []string {
 	msg := new(dns.Msg)
 	msg.SetQuestion(domain+".", dns.TypeNS)
-	resp, err := dnsExchange(msg, resolvers)
+	resp, err := dnsExchange(msg, o.resolvers, time.Duration(o.Timeout)*time.Second)
 	if err != nil {
 		return nil
 	}
@@ -81,8 +89,8 @@ func lookupNS(domain string, resolvers []string) []string {
 	return nameservers
 }
 
-func isNXDOMAIN(host string) bool {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+func isNXDOMAIN(host string, timeout time.Duration) bool {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	_, err := net.DefaultResolver.LookupHost(ctx, host)
 	if err != nil {
@@ -91,22 +99,15 @@ func isNXDOMAIN(host string) bool {
 	return false
 }
 
-// CheckNS checks whether any of a domain's nameservers are available for purchase.
-func CheckNS(domain, output string, verbose bool, resolvers []string) {
-	for _, ns := range lookupNS(domain, resolvers) {
-		if verbose {
-			msg := fmt.Sprintf("[*] %s: Nameserver is %s\n", domain, ns)
-			fmt.Print(msg)
-			if output != "" {
-				writeText(msg, output)
-			}
-		}
-
-		if isNXDOMAIN(ns) && available.Domain(ns) {
-			msg := fmt.Sprintf("[!] %s's nameserver: %s is available for purchase!\n", domain, ns)
-			fmt.Print(msg)
-			if output != "" {
-				writeText(msg, output)
+func checkNS(domain string, o *Options) {
+	timeout := time.Duration(o.Timeout) * time.Second
+	for _, ns := range lookupNS(domain, o) {
+		if isNXDOMAIN(ns, timeout) && available.Domain(ns) {
+			service := "NS TAKEOVER"
+			msg := fmt.Sprintf("[%s] %s - nameserver %s is available for purchase!", service, domain, ns)
+			fmt.Printf("[%s%s%s] %s - nameserver %s is available for purchase!\n", colorGreen, service, colorReset, domain, ns)
+			if o.Output != "" {
+				writeOutput(service, domain, msg+"\n", o.Output)
 			}
 		}
 	}

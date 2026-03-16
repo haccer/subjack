@@ -39,7 +39,25 @@ subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
 | `-a` | Send requests to every URL, not just those with identified CNAMEs **(recommended)** | `false` |
 | `-m` | Flag dead CNAME records even if the domain is not available for registration | `false` |
 | `-r` | Path to a list of DNS resolvers (one IP per line, falls back to `8.8.8.8` on failure) | |
+| `-ns` | Check if nameservers are available for purchase (NS takeover) | `false` |
 | `-v` | Display more information per request | `false` |
+
+## Stdin Support
+
+Subjack can read domains from stdin, making it easy to pipe output from other tools:
+
+```
+subfinder -d example.com | subjack -ssl -o results.json
+cat domains.txt | subjack -t 20 -o results.txt
+```
+
+## Nameserver Takeover
+
+With the `-ns` flag, subjack will check if any of a domain's nameservers have expired and are available for purchase. An attacker who registers an expired nameserver can take full control of all DNS for that domain.
+
+```
+subjack -w subdomains.txt -ns -o results.json
+```
 
 ## Practical Use
 
