@@ -15,7 +15,7 @@
 			"pantheonsite.io"
 		],
 		"fingerprint": [
-			"The gods are wise, but do not know of the site which you seek."
+			"404 error unknown site!"
 		],
 		"nxdomain": false
 	},
@@ -36,16 +36,6 @@
 		],
 		"fingerprint": [
 			"Do you want to register"
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "teamwork",
-		"cname": [
-			"teamwork.com"
-		],
-		"fingerprint": [
-			"Oops - We didn't find your site."
 		],
 		"nxdomain": false
 	},
@@ -85,7 +75,8 @@
 			"ghost.io"
 		],
 		"fingerprint": [
-			"The thing you were looking for is no longer here, or never was"
+			"Site unavailable",
+			"Failed to resolve DNS path for this host"
 		],
 		"nxdomain": false
 	},
@@ -96,16 +87,6 @@
 		],
 		"fingerprint": [
 			"Sorry, this shop is currently unavailable."
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "uservoice",
-		"cname": [
-			"uservoice.com"
-		],
-		"fingerprint": [
-			"This UserVoice subdomain is currently available!"
 		],
 		"nxdomain": false
 	},
@@ -152,59 +133,6 @@
 		"nxdomain": false
 	},
 	{
-		"service": "wishpond",
-		"cname": [
-			"wishpond.com"
-		],
-		"fingerprint": [
-			"https://www.wishpond.com/404?campaign=true"
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "aftership",
-		"cname": [
-			"aftership.com"
-		],
-		"fingerprint": [
-			"Oops.</h2><p class=\"text-muted text-tight\">The page you're looking for doesn't exist."
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "aha",
-		"cname": [
-			"ideas.aha.io"
-		],
-		"fingerprint": [
-			"There is no portal here ... sending you back to Aha!"
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "tictail",
-		"cname": [
-			"domains.tictail.com"
-		],
-		"fingerprint": [
-			"to target URL: <a href=\"https://tictail.com",
-			"Start selling on Tictail."
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "brightcove",
-		"cname": [
-			"bcvp0rtal.com",
-			"brightcovegallery.com",
-			"gallery.video"
-		],
-		"fingerprint": [
-			"<p class=\"bc-gallery-error-code\">Error Code: 404</p>"
-		],
-		"nxdomain": false
-	},
-	{
 		"service": "bigcartel",
 		"cname": [
 			"bigcartel.com"
@@ -225,42 +153,12 @@
 		"nxdomain": false
 	},
 	{
-		"service": "acquia",
-		"cname": [
-			"acquia-test.co"
-		],
-		"fingerprint": [
-			"The site you are looking for could not be found."
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "simplebooklet",
-		"cname": [
-			"simplebooklet.com"
-		],
-		"fingerprint": [
-			"We can't find this <a href=\"https://simplebooklet.com"
-		],
-		"nxdomain": false
-	},
-	{
 		"service": "getresponse",
 		"cname": [
 			".gr8.com"
 		],
 		"fingerprint": [
 			"With GetResponse Landing Pages, lead generation has never been easier"
-		],
-		"nxdomain": false
-	},
-	{
-		"service": "vend",
-		"cname": [
-			"vendecommerce.com"
-		],
-		"fingerprint": [
-			"Looks like you've traveled too far into cyberspace"
 		],
 		"nxdomain": false
 	},
@@ -290,22 +188,12 @@
 		"nxdomain": true
 	},
 	{
-		"service": "zendesk",
-		"cname": [
-			"zendesk.com"
-		],
-		"fingerprint": [
-			"Help Center Closed"
-		],
-		"nxdomain": false
-	},
-	{
 		"service": "readme",
 		"cname": [
 			"readme.io"
 		],
 		"fingerprint": [
-			"Project doesnt exist... yet!"
+			"The creators of this project are still working on making everything perfect!"
 		],
 		"nxdomain": false
 	},
@@ -342,6 +230,141 @@
 		],
 		"fingerprint": [
 			"Landing Page Not Found"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "elastic beanstalk",
+		"cname": [
+			"elasticbeanstalk.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "agilecrm",
+		"cname": [
+			"agilecrm.com"
+		],
+		"fingerprint": [
+			"Sorry, this page is no longer available."
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "anima",
+		"cname": [
+			"animaapp.io"
+		],
+		"fingerprint": [
+			"The page you were looking for does not exist."
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "canny",
+		"cname": [
+			"canny.io"
+		],
+		"fingerprint": [
+			"Company Not Found",
+			"There is no such company. Did you enter the right URL?"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "discourse",
+		"cname": [
+			"trydiscourse.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "gemfury",
+		"cname": [
+			"furyns.com"
+		],
+		"fingerprint": [
+			"404: This page could not be found."
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "hatenablog",
+		"cname": [
+			"hatenablog.com"
+		],
+		"fingerprint": [
+			"404 Blog is not found"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "launchrock",
+		"cname": [
+			"launchrock.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "ngrok",
+		"cname": [
+			"ngrok.io"
+		],
+		"fingerprint": [
+			"ngrok.io not found"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "pingdom",
+		"cname": [
+			"pingdom.com"
+		],
+		"fingerprint": [
+			"Sorry, couldn't find the status page"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "strikingly",
+		"cname": [
+			"s.strikinglydns.com"
+		],
+		"fingerprint": [
+			"PAGE NOT FOUND"
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "surveysparrow",
+		"cname": [
+			"surveysparrow.com"
+		],
+		"fingerprint": [
+			"Account not found."
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "uberflip",
+		"cname": [
+			"read.uberflip.com"
+		],
+		"fingerprint": [
+			"The URL you've accessed does not provide a hub."
+		],
+		"nxdomain": false
+	},
+	{
+		"service": "uptimerobot",
+		"cname": [
+			"stats.uptimerobot.com"
+		],
+		"fingerprint": [
+			"page not found"
 		],
 		"nxdomain": false
 	}
