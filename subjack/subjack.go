@@ -20,6 +20,7 @@ type Options struct {
 	CheckNS      bool
 	CheckAR      bool
 	CheckAXFR    bool
+	CheckMail    bool
 	ResolverList string
 	Stdin        bool
 	fingerprints []Fingerprint

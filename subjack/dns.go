@@ -45,6 +45,14 @@ func check(url string, o *Options) {
 		checkAXFR(url, o)
 	}
 
+	if o.CheckMail {
+		checkSPF(url, o)
+		checkMX(url, o)
+	}
+
+	checkCNAMEChain(url, o)
+	checkSRV(url, o)
+
 	if o.All {
 		detect(url, o)
 		return

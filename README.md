@@ -18,6 +18,10 @@ Subjack detects:
 - **NS delegation takeovers** — expired nameserver domains and dangling cloud DNS zones (Route 53, Google Cloud DNS, Azure DNS, DigitalOcean, Vultr, Linode)
 - **Stale A records** — A records pointing to dead IPs on cloud providers (AWS, GCP, Azure, DigitalOcean, Linode, Vultr, Oracle)
 - **Zone transfers (AXFR)** — misconfigured nameservers leaking entire zone files, with NS hostname bruteforcing
+- **SPF include takeovers** — expired domains in SPF `include:` directives enabling email spoofing
+- **MX record takeovers** — expired mail server domains enabling email interception
+- **CNAME chain takeovers** — multi-level CNAME chains where intermediate targets are claimable
+- **SRV record takeovers** — SRV records pointing to expired/registrable domains
 - **NXDOMAIN registration** — domains that don't exist and are available to be registered
 
 ## Installing
@@ -48,6 +52,7 @@ subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
 | `-ns` | Check for NS takeovers (expired NS domains + dangling cloud DNS delegations) | `false` |
 | `-ar` | Check for stale A records pointing to dead IPs (may require root for ICMP) | `false` |
 | `-axfr` | Check for zone transfers (AXFR) including NS bruteforce | `false` |
+| `-mail` | Check for SPF include and MX record takeovers | `false` |
 | `-v` | Display more information per request | `false` |
 
 ## Stdin Support
@@ -100,6 +105,26 @@ subjack -w domains.txt -axfr -o results.json
 ```
 
 Results are flagged as `ZONE TRANSFER` with the vulnerable nameserver and number of records exposed.
+
+## Email Takeover Detection
+
+With the `-mail` flag, subjack checks for two email-based takeover vectors:
+
+**SPF include takeover**: Parses SPF TXT records and checks if any `include:` domains are expired and available for registration. An attacker who registers the included domain can send fully authenticated emails as the target, bypassing SPF and DMARC.
+
+**MX record takeover**: Checks if any MX record targets are expired and available for registration. An attacker who controls the mail server can intercept all inbound email — password resets, 2FA codes, and more.
+
+```
+subjack -w domains.txt -mail -o results.json
+```
+
+## CNAME Chain and SRV Detection
+
+These checks run automatically on every scan:
+
+**CNAME chain takeover**: Follows multi-level CNAME chains (up to 10 deep) and checks if any intermediate target is claimable. Standard CNAME detection only checks the first hop — chains catch deeper takeover opportunities.
+
+**SRV record takeover**: Checks common SRV records (SIP, XMPP, LDAP, Kerberos, IMAP, CalDAV, etc.) for targets that are expired and available for registration.
 
 ## Practical Use
 
