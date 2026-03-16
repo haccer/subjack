@@ -47,7 +47,14 @@ func identify(subdomain string, o *Options) string {
 			if fp.Nxdomain {
 				for _, c := range fp.Cname {
 					if strings.Contains(cname, c) {
-						return strings.ToUpper(fp.Service)
+						service := strings.ToUpper(fp.Service)
+						if strings.HasPrefix(service, "AZURE-") {
+							service = verifyAzure(service, cname, o)
+							if service == "" {
+								return ""
+							}
+						}
+						return service
 					}
 				}
 			}

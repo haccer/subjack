@@ -37,6 +37,11 @@ func check(url string, o *Options) {
 
 	if o.CheckNS {
 		checkNS(url, o)
+		checkDanglingNS(url, o)
+	}
+
+	if o.CheckAR {
+		checkARecord(url, o)
 	}
 
 	if o.All {

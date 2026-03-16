@@ -18,6 +18,7 @@ type Options struct {
 	Verbose      bool
 	Manual       bool
 	CheckNS      bool
+	CheckAR      bool
 	ResolverList string
 	Stdin        bool
 	fingerprints []Fingerprint

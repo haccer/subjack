@@ -173,16 +173,64 @@
 		"nxdomain": false
 	},
 	{
-		"service": "azure",
+		"service": "azure-trafficmanager",
 		"cname": [
-			".azurewebsites.net",
-			".cloudapp.net",
-			".cloudapp.azure.com",
-			".trafficmanager.net",
-			".blob.core.windows.net",
-			".azure-api.net",
-			".azurehdinsight.net",
+			".trafficmanager.net"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "azure-appservice",
+		"cname": [
+			".azurewebsites.net"
+		],
+		"fingerprint": [
+			"Web App - Unavailable",
+			"Error 404 - Web app not found."
+		],
+		"nxdomain": true
+	},
+	{
+		"service": "azure-blob",
+		"cname": [
+			".blob.core.windows.net"
+		],
+		"fingerprint": [
+			"The specified resource does not exist.",
+			"BlobNotFound"
+		],
+		"nxdomain": true
+	},
+	{
+		"service": "azure-cdn",
+		"cname": [
 			".azureedge.net"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "azure-cloudapp",
+		"cname": [
+			".cloudapp.net",
+			".cloudapp.azure.com"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "azure-api",
+		"cname": [
+			".azure-api.net"
+		],
+		"fingerprint": [],
+		"nxdomain": true
+	},
+	{
+		"service": "azure-hdinsight",
+		"cname": [
+			".azurehdinsight.net"
 		],
 		"fingerprint": [],
 		"nxdomain": true

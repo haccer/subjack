@@ -7,12 +7,17 @@
 <p align="center">
   <img src="subjack.png" alt="subjack logo">
   <br>
-  <b>Subdomain Takeover Tool</b>
+  <b>DNS Takeover Scanner</b>
 </p>
 
-Subjack is a subdomain takeover tool written in Go designed to scan a list of subdomains concurrently and identify ones that are able to be hijacked. With Go's speed and efficiency, this tool really stands out when it comes to mass-testing. Always double check the results manually to rule out false positives.
+Subjack is a DNS takeover scanner written in Go designed to scan a list of domains concurrently and identify ones that are able to be hijacked. With Go's speed and efficiency, this tool really stands out when it comes to mass-testing. Always double check the results manually to rule out false positives.
 
-Subjack will also check for subdomains attached to domains that don't exist (NXDOMAIN) and are **available to be registered**. No need for dig ever again!
+Subjack detects:
+
+- **CNAME takeovers** — dangling CNAMEs pointing to unclaimed third-party services
+- **NS delegation takeovers** — expired nameserver domains and dangling cloud DNS zones (Route 53, Google Cloud DNS, Azure DNS, DigitalOcean, Vultr, Linode)
+- **Stale A records** — A records pointing to dead IPs on cloud providers (AWS, GCP, Azure, DigitalOcean, Linode, Vultr, Oracle)
+- **NXDOMAIN registration** — domains that don't exist and are available to be registered
 
 ## Installing
 
@@ -39,7 +44,8 @@ subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
 | `-a` | Send requests to every URL, not just those with identified CNAMEs **(recommended)** | `false` |
 | `-m` | Flag dead CNAME records even if the domain is not available for registration | `false` |
 | `-r` | Path to a list of DNS resolvers (one IP per line, falls back to `8.8.8.8` on failure) | |
-| `-ns` | Check if nameservers are available for purchase (NS takeover) | `false` |
+| `-ns` | Check for NS takeovers (expired NS domains + dangling cloud DNS delegations) | `false` |
+| `-ar` | Check for stale A records pointing to dead IPs (may require root for ICMP) | `false` |
 | `-v` | Display more information per request | `false` |
 
 ## Stdin Support
@@ -53,11 +59,34 @@ cat domains.txt | subjack -t 20 -o results.txt
 
 ## Nameserver Takeover
 
-With the `-ns` flag, subjack will check if any of a domain's nameservers have expired and are available for purchase. An attacker who registers an expired nameserver can take full control of all DNS for that domain.
+With the `-ns` flag, subjack performs two types of nameserver takeover checks:
+
+**Expired NS domains**: Checks if any of a domain's nameservers have expired and are available for purchase. An attacker who registers an expired nameserver can take full control of all DNS for that domain — they can point any record anywhere, intercept email, issue certificates, and more.
+
+**Dangling NS delegations**: Detects when a domain's NS records point to cloud DNS providers but the hosted zone has been deleted. Subjack queries each nameserver directly for an SOA record — if all return `SERVFAIL` or `REFUSED`, the zone is gone and potentially claimable. Supported providers:
+
+- AWS Route 53 (`ns-*.awsdns-*`)
+- Google Cloud DNS (`ns-cloud-*.googledomains.com`)
+- Azure DNS (`ns*-*.azure-dns.*`)
+- DigitalOcean DNS (`ns*.digitalocean.com`)
+- Vultr DNS (`ns*.vultr.com`)
+- Linode DNS (`ns*.linode.com`)
 
 ```
 subjack -w subdomains.txt -ns -o results.json
 ```
+
+## Stale A Record Detection
+
+With the `-ar` flag, subjack will resolve A records and check if the IP address is actually alive. When a company terminates a cloud server but forgets to remove the DNS A record, the IP gets released back to the provider's pool. An attacker can spin up new instances on that provider until they land on the same IP, gaining control of the subdomain.
+
+Subjack identifies the cloud provider (AWS, GCP, Azure, DigitalOcean, Linode, Vultr, Oracle) when possible, making it easier to target the right platform. Detection uses ICMP ping (requires root) with a TCP fallback on ports 80/443.
+
+```
+sudo subjack -w subdomains.txt -ar -o results.json
+```
+
+Results are flagged as `STALE A RECORD` and should be verified manually — a non-responding IP doesn't always mean it's reclaimable.
 
 ## Practical Use
 
@@ -79,7 +108,8 @@ dev2.twitter.com
 
 ## References
 
-Extra information about hostile subdomain takeovers:
+Extra information about DNS takeovers:
 
 - [Can I take over XYZ?](https://github.com/EdOverflow/can-i-take-over-xyz)
 - [Hostile Subdomain Takeover using Heroku/GitHub/Desk + More](https://labs.detectify.com/2014/10/21/hostile-subdomain-takeover-using-herokugithubdesk-more/)
+- [Can I take over DNS?](https://github.com/indianajson/can-i-take-over-dns)
