@@ -3,7 +3,6 @@ package subjack
 import (
 	"bytes"
 	"strings"
-	"time"
 
 	"github.com/haccer/available"
 )
@@ -38,7 +37,7 @@ func identify(subdomain string, o *Options) string {
 		cname = ""
 	}
 
-	if isNXDOMAIN(subdomain, time.Duration(o.Timeout)*time.Second) {
+	if isNXDOMAIN(subdomain, o) {
 		if available.Domain(cname) {
 			return "DOMAIN AVAILABLE - " + cname
 		}

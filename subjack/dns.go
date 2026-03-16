@@ -1,11 +1,8 @@
 package subjack
 
 import (
-	"context"
 	"fmt"
 	"math/rand/v2"
-	"net"
-	"strings"
 	"time"
 
 	"github.com/haccer/available"
@@ -94,20 +91,19 @@ func lookupNS(domain string, o *Options) []string {
 	return nameservers
 }
 
-func isNXDOMAIN(host string, timeout time.Duration) bool {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-	_, err := net.DefaultResolver.LookupHost(ctx, host)
+func isNXDOMAIN(host string, o *Options) bool {
+	msg := new(dns.Msg)
+	msg.SetQuestion(dns.Fqdn(host), dns.TypeA)
+	resp, err := dnsExchange(msg, o.resolvers, time.Duration(o.Timeout)*time.Second)
 	if err != nil {
-		return strings.Contains(err.Error(), "no such host")
+		return false
 	}
-	return false
+	return resp.Rcode == dns.RcodeNameError
 }
 
 func checkNS(domain string, o *Options) {
-	timeout := time.Duration(o.Timeout) * time.Second
 	for _, ns := range lookupNS(domain, o) {
-		if isNXDOMAIN(ns, timeout) && available.Domain(ns) {
+		if isNXDOMAIN(ns, o) && available.Domain(ns) {
 			service := "NS TAKEOVER"
 			msg := fmt.Sprintf("[%s] %s - nameserver %s is available for purchase!", service, domain, ns)
 			fmt.Printf("[%s%s%s] %s - nameserver %s is available for purchase!\n", colorGreen, service, colorReset, domain, ns)
