@@ -62,7 +62,9 @@
 	{
 		"service": "s3 bucket",
 		"cname": [
-			"amazonaws"
+			".s3.amazonaws.com",
+			".s3-website.amazonaws.com",
+			".s3-website-"
 		],
 		"fingerprint": [
 			"The specified bucket does not exist"
