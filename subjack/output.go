@@ -82,12 +82,6 @@ func writeOutput(service, url, plain, output string) {
 	}
 }
 
-func writeText(text, path string) {
-	outputMu.Lock()
-	defer outputMu.Unlock()
-	appendText(text, path)
-}
-
 func appendText(text, path string) {
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0600)
 	if err != nil {
