@@ -41,6 +41,10 @@ func check(url string, o *Options) {
 		checkARecord(url, o)
 	}
 
+	if o.CheckAXFR {
+		checkAXFR(url, o)
+	}
+
 	if o.All {
 		detect(url, o)
 		return

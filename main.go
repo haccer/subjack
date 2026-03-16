@@ -23,6 +23,7 @@ func main() {
 	flag.BoolVar(&o.Manual, "m", false, "Flag dead CNAME records even if the domain is not available for registration.")
 	flag.BoolVar(&o.CheckNS, "ns", false, "Check if nameservers are available for purchase (NS takeover).")
 	flag.BoolVar(&o.CheckAR, "ar", false, "Check for stale A records pointing to dead IPs (may require root for ICMP).")
+	flag.BoolVar(&o.CheckAXFR, "axfr", false, "Check for zone transfers (AXFR) including NS bruteforce.")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n\nOptions:\n", os.Args[0])

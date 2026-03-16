@@ -17,6 +17,7 @@ Subjack detects:
 - **CNAME takeovers** — dangling CNAMEs pointing to unclaimed third-party services
 - **NS delegation takeovers** — expired nameserver domains and dangling cloud DNS zones (Route 53, Google Cloud DNS, Azure DNS, DigitalOcean, Vultr, Linode)
 - **Stale A records** — A records pointing to dead IPs on cloud providers (AWS, GCP, Azure, DigitalOcean, Linode, Vultr, Oracle)
+- **Zone transfers (AXFR)** — misconfigured nameservers leaking entire zone files, with NS hostname bruteforcing
 - **NXDOMAIN registration** — domains that don't exist and are available to be registered
 
 ## Installing
@@ -46,6 +47,7 @@ subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
 | `-r` | Path to a list of DNS resolvers (one IP per line, falls back to `8.8.8.8` on failure) | |
 | `-ns` | Check for NS takeovers (expired NS domains + dangling cloud DNS delegations) | `false` |
 | `-ar` | Check for stale A records pointing to dead IPs (may require root for ICMP) | `false` |
+| `-axfr` | Check for zone transfers (AXFR) including NS bruteforce | `false` |
 | `-v` | Display more information per request | `false` |
 
 ## Stdin Support
@@ -87,6 +89,17 @@ sudo subjack -w subdomains.txt -ar -o results.json
 ```
 
 Results are flagged as `STALE A RECORD` and should be verified manually — a non-responding IP doesn't always mean it's reclaimable.
+
+## Zone Transfer Detection
+
+With the `-axfr` flag, subjack will attempt DNS zone transfers (AXFR) which can expose an entire domain's DNS records. Subjack goes beyond just testing the domain's official nameservers — it also bruteforces common nameserver hostnames (`ns1`, `dns-0`, `ns-backup`, etc.) because hidden or forgotten nameservers are often left unsecured even after the primary ones have been locked down.
+
+```
+subjack -d example.com -axfr -o results.json
+subjack -w domains.txt -axfr -o results.json
+```
+
+Results are flagged as `ZONE TRANSFER` with the vulnerable nameserver and number of records exposed.
 
 ## Practical Use
 
