@@ -1,7 +1,7 @@
 # subjack
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/haccer/subjack)](https://goreportcard.com/report/github.com/haccer/subjack)
-[![GoDoc](https://godoc.org/github.com/haccer/subjack/subjack?status.svg)](http://godoc.org/github.com/haccer/subjack/subjack)
+[![CI](https://github.com/haccer/subjack/actions/workflows/ci.yml/badge.svg)](https://github.com/haccer/subjack/actions/workflows/ci.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/haccer/subjack/subjack.svg)](https://pkg.go.dev/github.com/haccer/subjack/subjack)
 [![GitHub license](https://img.shields.io/github/license/haccer/subjack.svg)](https://github.com/haccer/subjack/blob/master/LICENSE)
 
 <p align="center">
@@ -22,7 +22,7 @@ Subjack detects:
 - **MX record takeovers** — expired mail server domains enabling email interception
 - **CNAME chain takeovers** — multi-level CNAME chains where intermediate targets are claimable
 - **SRV record takeovers** — SRV records pointing to expired/registrable domains
-- **NXDOMAIN registration** — domains that don't exist and are available to be registered
+- **NXDOMAIN registration** — domains that don't exist and are available to be registered (confirmed via RDAP through [available](https://github.com/haccer/available))
 
 ## Installing
 
@@ -149,6 +149,14 @@ dev.xen.world
 dev2.twitter.com
 ```
 
+## Testing
+
+The test suite is hermetic — it runs against local DNS and HTTP fixtures and needs no network:
+
+```
+go test -race ./...
+```
+
 ## References
 
 Extra information about DNS takeovers:
@@ -156,3 +164,7 @@ Extra information about DNS takeovers:
 - [Can I take over XYZ?](https://github.com/EdOverflow/can-i-take-over-xyz)
 - [Hostile Subdomain Takeover using Heroku/GitHub/Desk + More](https://labs.detectify.com/2014/10/21/hostile-subdomain-takeover-using-herokugithubdesk-more/)
 - [Can I take over DNS?](https://github.com/indianajson/can-i-take-over-dns)
+
+## License
+
+subjack is released under the [MIT License](LICENSE).
