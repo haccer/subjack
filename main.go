@@ -25,6 +25,7 @@ func main() {
 	flag.BoolVar(&o.CheckAR, "ar", false, "Check for stale A records pointing to dead IPs (may require root for ICMP).")
 	flag.BoolVar(&o.CheckAXFR, "axfr", false, "Check for zone transfers (AXFR) including NS bruteforce.")
 	flag.BoolVar(&o.CheckMail, "mail", false, "Check for SPF include and MX record takeovers.")
+	flag.BoolVar(&o.CheckSRV, "srv", false, "Check for SRV record takeovers (adds ~28 DNS queries per domain).")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n\nOptions:\n", os.Args[0])

@@ -2,12 +2,28 @@ package subjack
 
 import (
 	"fmt"
+	"net"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/miekg/dns"
 )
+
+// dnsPort is the port used for direct queries to authoritative servers
+// (SOA probes and AXFR). It is a variable so tests can point these
+// queries at a local fixture.
+var dnsPort = "53"
+
+// withDNSPort appends the authoritative-query port to a hostname unless
+// it already carries one.
+func withDNSPort(host string) string {
+	host = strings.TrimSuffix(host, ".")
+	if _, _, err := net.SplitHostPort(host); err == nil {
+		return host
+	}
+	return net.JoinHostPort(host, dnsPort)
+}
 
 type cloudDNSProvider struct {
 	name    string
@@ -66,7 +82,7 @@ func checkDanglingNS(domain string, o *Options) {
 	for _, ns := range nameservers {
 		p := identifyDNSProvider(ns)
 		if p != "" {
-			cloudNSes = append(cloudNSes, strings.TrimSuffix(ns, ".")+":53")
+			cloudNSes = append(cloudNSes, withDNSPort(ns))
 			provider = p
 		}
 	}
@@ -75,25 +91,8 @@ func checkDanglingNS(domain string, o *Options) {
 	}
 
 	timeout := time.Duration(o.Timeout) * time.Second
-	client := &dns.Client{Timeout: timeout}
 
-	soaMsg := new(dns.Msg)
-	soaMsg.SetQuestion(dns.Fqdn(domain), dns.TypeSOA)
-	soaMsg.RecursionDesired = false
-
-	failed := 0
-	for _, ns := range cloudNSes {
-		resp, _, err := client.Exchange(soaMsg, ns)
-		if err != nil {
-			continue
-		}
-		if resp.Rcode == dns.RcodeServerFailure || resp.Rcode == dns.RcodeRefused {
-			failed++
-		}
-	}
-
-	// All cloud NS must return failure to confirm
-	if failed == 0 || failed != len(cloudNSes) {
+	if !allNSFailSOA(domain, cloudNSes, timeout) {
 		return
 	}
 
@@ -106,4 +105,28 @@ func checkDanglingNS(domain string, o *Options) {
 		msg := fmt.Sprintf("[%s] %s\n", service, detail)
 		writeOutput(service, domain, msg, o.Output)
 	}
+}
+
+// allNSFailSOA reports whether every authoritative server refuses or fails
+// a direct SOA query for the zone, which indicates the hosted zone is gone.
+func allNSFailSOA(domain string, nsAddrs []string, timeout time.Duration) bool {
+	client := &dns.Client{Timeout: timeout}
+
+	soaMsg := new(dns.Msg)
+	soaMsg.SetQuestion(dns.Fqdn(domain), dns.TypeSOA)
+	soaMsg.RecursionDesired = false
+
+	failed := 0
+	for _, ns := range nsAddrs {
+		resp, _, err := client.Exchange(soaMsg, ns)
+		if err != nil {
+			continue
+		}
+		if resp.Rcode == dns.RcodeServerFailure || resp.Rcode == dns.RcodeRefused {
+			failed++
+		}
+	}
+
+	// All cloud NS must return failure to confirm
+	return failed > 0 && failed == len(nsAddrs)
 }

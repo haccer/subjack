@@ -3,19 +3,33 @@ package subjack
 import (
 	"fmt"
 	"math/rand/v2"
+	"net"
+	"strings"
 	"time"
 
-	"github.com/haccer/available"
 	"github.com/miekg/dns"
 )
 
-const defaultResolver = "8.8.8.8:53"
+// defaultResolver is used when no resolver list is given, and as the
+// fallback when a custom resolver fails. It is a variable so tests can
+// point it at a local fixture.
+var defaultResolver = "8.8.8.8:53"
 
+// pickResolver picks a random resolver from the list. Entries may be bare
+// IPs or hostnames (port 53 is appended) or full host:port addresses.
 func pickResolver(resolvers []string) string {
 	if len(resolvers) == 0 {
 		return defaultResolver
 	}
-	return resolvers[rand.IntN(len(resolvers))] + ":53"
+
+	r := resolvers[rand.IntN(len(resolvers))]
+	if net.ParseIP(r) != nil {
+		return net.JoinHostPort(r, "53")
+	}
+	if _, _, err := net.SplitHostPort(r); err == nil {
+		return r
+	}
+	return net.JoinHostPort(r, "53")
 }
 
 func dnsExchange(msg *dns.Msg, resolvers []string, timeout time.Duration) (*dns.Msg, error) {
@@ -50,8 +64,11 @@ func check(url string, o *Options) {
 		checkMX(url, o)
 	}
 
+	if o.CheckSRV {
+		checkSRV(url, o)
+	}
+
 	checkCNAMEChain(url, o)
-	checkSRV(url, o)
 
 	if o.All {
 		detect(url, o)
@@ -115,12 +132,13 @@ func isNXDOMAIN(host string, o *Options) bool {
 
 func checkNS(domain string, o *Options) {
 	for _, ns := range lookupNS(domain, o) {
-		if isNXDOMAIN(ns, o) && available.Domain(ns) {
+		if isNXDOMAIN(ns, o) && o.domainAvailable(normalizeDomain(ns)) {
 			service := "NS TAKEOVER"
-			msg := fmt.Sprintf("[%s] %s - nameserver %s is available for purchase!", service, domain, ns)
-			fmt.Printf("[%s%s%s] %s - nameserver %s is available for purchase!\n", colorGreen, service, colorReset, domain, ns)
+			nsName := strings.TrimSuffix(ns, ".")
+			msg := fmt.Sprintf("[%s] %s - nameserver %s is available for purchase!\n", service, domain, nsName)
+			fmt.Printf("[%s%s%s] %s - nameserver %s is available for purchase!\n", colorGreen, service, colorReset, domain, nsName)
 			if o.Output != "" {
-				writeOutput(service, domain, msg+"\n", o.Output)
+				writeOutput(service, domain, msg, o.Output)
 			}
 		}
 	}

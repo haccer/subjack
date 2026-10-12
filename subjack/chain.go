@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/haccer/available"
 	"github.com/miekg/dns"
 )
 
@@ -54,7 +53,7 @@ func checkCNAMEChain(domain string, o *Options) {
 			continue
 		}
 
-		if isNXDOMAIN(link, o) && available.Domain(link) {
+		if isNXDOMAIN(link, o) && o.domainAvailable(strings.TrimSuffix(link, ".")) {
 			service := "CNAME CHAIN TAKEOVER"
 			chainStr := domain + " -> " + strings.Join(chain[:i+1], " -> ")
 			detail := fmt.Sprintf("%s - %s is available for registration (chain: %s)", domain, link, chainStr)
@@ -122,7 +121,7 @@ func checkSRV(domain string, o *Options) {
 				continue
 			}
 
-			if isNXDOMAIN(target, o) && available.Domain(target) {
+			if isNXDOMAIN(target, o) && o.domainAvailable(strings.TrimSuffix(target, ".")) {
 				service := "SRV TAKEOVER"
 				detail := fmt.Sprintf("%s - SRV %s points to %s which is available for registration", domain, prefix, target)
 				fmt.Printf("[%s%s%s] %s\n", colorGreen, service, colorReset, detail)

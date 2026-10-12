@@ -21,16 +21,26 @@ type Options struct {
 	CheckAR      bool
 	CheckAXFR    bool
 	CheckMail    bool
+	CheckSRV     bool
 	ResolverList string
 	Stdin        bool
 	fingerprints []Fingerprint
 	resolvers    []string
 	sem          chan struct{}
+	// checkAvailable overrides domain-availability lookups; used by tests.
+	checkAvailable func(domain string) bool
 }
 
 func Process(o *Options) {
 	var list []string
 	var err error
+
+	if o.Threads <= 0 {
+		o.Threads = 10
+	}
+	if o.Timeout <= 0 {
+		o.Timeout = 10
+	}
 
 	if len(o.Domain) > 0 {
 		list = append(list, o.Domain)

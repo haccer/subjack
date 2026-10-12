@@ -2,6 +2,7 @@ package subjack
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"strings"
 	"time"
@@ -36,8 +37,7 @@ func checkAXFR(domain string, o *Options) {
 
 	// 1. Try AXFR against actual NS records
 	for _, ns := range lookupNS(domain, o) {
-		nsHost := strings.TrimSuffix(ns, ".") + ":53"
-		if tryAXFR(domain, nsHost, timeout, o) {
+		if tryAXFR(domain, withDNSPort(ns), timeout, o) {
 			return
 		}
 	}
@@ -45,8 +45,7 @@ func checkAXFR(domain string, o *Options) {
 	// Also try NS records of the base domain if different
 	if baseDomain != domain {
 		for _, ns := range lookupNS(baseDomain, o) {
-			nsHost := strings.TrimSuffix(ns, ".") + ":53"
-			if tryAXFR(domain, nsHost, timeout, o) {
+			if tryAXFR(domain, withDNSPort(ns), timeout, o) {
 				return
 			}
 		}
@@ -59,12 +58,12 @@ func checkAXFR(domain string, o *Options) {
 		if err != nil || len(ips) == 0 {
 			continue
 		}
-		if tryAXFR(domain, candidate+":53", timeout, o) {
+		if tryAXFR(domain, withDNSPort(candidate), timeout, o) {
 			return
 		}
 		// Also try AXFR for the base domain on this NS
 		if baseDomain != domain {
-			if tryAXFR(baseDomain, candidate+":53", timeout, o) {
+			if tryAXFR(baseDomain, withDNSPort(candidate), timeout, o) {
 				return
 			}
 		}
@@ -88,6 +87,12 @@ func tryAXFR(domain, nsHost string, timeout time.Duration, o *Options) bool {
 
 	var records []string
 	for envelope := range ch {
+		// A clean end-of-stream is delivered as a final envelope carrying
+		// io.EOF once the server closes the connection; that is success,
+		// not an error.
+		if envelope.Error == io.EOF {
+			break
+		}
 		if envelope.Error != nil {
 			return false
 		}

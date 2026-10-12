@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/haccer/available"
 	"github.com/miekg/dns"
 )
 
@@ -38,7 +37,7 @@ func checkSPF(domain string, o *Options) {
 				continue
 			}
 
-			if isNXDOMAIN(includeDomain, o) && available.Domain(includeDomain) {
+			if isNXDOMAIN(includeDomain, o) && o.domainAvailable(includeDomain) {
 				service := "SPF TAKEOVER"
 				detail := fmt.Sprintf("%s - SPF include:%s is available for registration", domain, includeDomain)
 				fmt.Printf("[%s%s%s] %s\n", colorGreen, service, colorReset, detail)
@@ -70,7 +69,7 @@ func checkMX(domain string, o *Options) {
 			continue
 		}
 
-		if isNXDOMAIN(mxHost, o) && available.Domain(mxHost) {
+		if isNXDOMAIN(mxHost, o) && o.domainAvailable(mxHost) {
 			service := "MX TAKEOVER"
 			detail := fmt.Sprintf("%s - mail server %s is available for registration", domain, mxHost)
 			fmt.Printf("[%s%s%s] %s\n", colorGreen, service, colorReset, detail)

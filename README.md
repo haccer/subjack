@@ -32,6 +32,8 @@ Requires [Go](https://golang.org/dl/)
 go install github.com/haccer/subjack@latest
 ```
 
+Prebuilt binaries for Linux, macOS, and Windows are also available on the [releases page](https://github.com/haccer/subjack/releases) — handy for small VPSes where compiling is slow.
+
 ## Usage
 
 ```
@@ -48,11 +50,12 @@ subjack -w subdomains.txt -t 100 -timeout 30 -o results.txt -ssl
 | `-ssl` | Force HTTPS connections (may increase accuracy) | `false` |
 | `-a` | Send requests to every URL, not just those with identified CNAMEs **(recommended)** | `false` |
 | `-m` | Flag dead CNAME records even if the domain is not available for registration | `false` |
-| `-r` | Path to a list of DNS resolvers (one IP per line, falls back to `8.8.8.8` on failure) | |
+| `-r` | Path to a list of DNS resolvers (one IP or `host:port` per line, falls back to `8.8.8.8` on failure) | |
 | `-ns` | Check for NS takeovers (expired NS domains + dangling cloud DNS delegations) | `false` |
 | `-ar` | Check for stale A records pointing to dead IPs (may require root for ICMP) | `false` |
 | `-axfr` | Check for zone transfers (AXFR) including NS bruteforce | `false` |
 | `-mail` | Check for SPF include and MX record takeovers | `false` |
+| `-srv` | Check for SRV record takeovers (adds ~28 DNS queries per domain) | `false` |
 | `-v` | Display more information per request | `false` |
 
 ## Stdin Support
@@ -120,11 +123,13 @@ subjack -w domains.txt -mail -o results.json
 
 ## CNAME Chain and SRV Detection
 
-These checks run automatically on every scan:
+**CNAME chain takeover** runs automatically on every scan: it follows multi-level CNAME chains (up to 10 deep) and checks if any intermediate target is claimable. Standard CNAME detection only checks the first hop — chains catch deeper takeover opportunities.
 
-**CNAME chain takeover**: Follows multi-level CNAME chains (up to 10 deep) and checks if any intermediate target is claimable. Standard CNAME detection only checks the first hop — chains catch deeper takeover opportunities.
+**SRV record takeover** is opt-in with the `-srv` flag, since probing the common SRV locations (SIP, XMPP, LDAP, Kerberos, IMAP, CalDAV, etc.) adds roughly 28 DNS queries per domain:
 
-**SRV record takeover**: Checks common SRV records (SIP, XMPP, LDAP, Kerberos, IMAP, CalDAV, etc.) for targets that are expired and available for registration.
+```
+subjack -w domains.txt -srv -o results.json
+```
 
 ## Practical Use
 

@@ -1,6 +1,11 @@
 package subjack
 
-import "testing"
+import (
+	"testing"
+	"time"
+
+	"github.com/miekg/dns"
+)
 
 func TestIdentifyDNSProvider(t *testing.T) {
 	tests := []struct {
@@ -42,5 +47,59 @@ func TestIdentifyDNSProvider(t *testing.T) {
 		if got != tt.expected {
 			t.Errorf("identifyDNSProvider(%q) = %q, want %q", tt.ns, got, tt.expected)
 		}
+	}
+}
+
+func TestWithDNSPort(t *testing.T) {
+	tests := []struct {
+		host     string
+		expected string
+	}{
+		{"ns1.example.com.", "ns1.example.com:53"},
+		{"ns1.example.com", "ns1.example.com:53"},
+		{"ns1.example.com:5300", "ns1.example.com:5300"},
+		{"localhost", "localhost:53"},
+	}
+	for _, tt := range tests {
+		if got := withDNSPort(tt.host); got != tt.expected {
+			t.Errorf("withDNSPort(%q) = %q, want %q", tt.host, got, tt.expected)
+		}
+	}
+}
+
+func TestAllNSFailSOA_AllRefused(t *testing.T) {
+	addr := startTestDNSServer(t, (&fakeDNS{
+		soaRcode: map[string]int{"app.test.": dns.RcodeRefused},
+	}).handler())
+
+	if !allNSFailSOA("app.test", []string{addr}, 2*time.Second) {
+		t.Error("allNSFailSOA = false, want true when every NS refuses SOA")
+	}
+}
+
+func TestAllNSFailSOA_AllServfail(t *testing.T) {
+	addr := startTestDNSServer(t, (&fakeDNS{
+		soaRcode: map[string]int{"app.test.": dns.RcodeServerFailure},
+	}).handler())
+
+	if !allNSFailSOA("app.test", []string{addr}, 2*time.Second) {
+		t.Error("allNSFailSOA = false, want true when every NS SERVFAILs SOA")
+	}
+}
+
+func TestAllNSFailSOA_OneHealthy(t *testing.T) {
+	dead := startTestDNSServer(t, (&fakeDNS{
+		soaRcode: map[string]int{"app.test.": dns.RcodeRefused},
+	}).handler())
+	healthy := startTestDNSServer(t, (&fakeDNS{}).handler())
+
+	if allNSFailSOA("app.test", []string{dead, healthy}, 2*time.Second) {
+		t.Error("allNSFailSOA = true, want false when one NS answers SOA")
+	}
+}
+
+func TestAllNSFailSOA_Unreachable(t *testing.T) {
+	if allNSFailSOA("app.test", []string{"127.0.0.1:1"}, 1*time.Second) {
+		t.Error("allNSFailSOA = true, want false when the NS is unreachable")
 	}
 }

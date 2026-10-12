@@ -65,16 +65,18 @@ func extractTMName(cname string) string {
 	return strings.TrimSuffix(cname, suffix)
 }
 
+// azureCheckURL is the Traffic Manager name-availability endpoint. It is a
+// variable so tests can point it at a local fixture.
+var azureCheckURL = "https://management.azure.com/providers/Microsoft.Network/checkTrafficManagerNameAvailability?api-version=2022-04-01"
+
 func checkTrafficManagerAvailable(name string, timeout time.Duration) (bool, error) {
 	reqBody, _ := json.Marshal(tmCheckRequest{
 		Name: name,
 		Type: "microsoft.network/trafficmanagerprofiles",
 	})
 
-	url := "https://management.azure.com/providers/Microsoft.Network/checkTrafficManagerNameAvailability?api-version=2022-04-01"
-
 	client := &http.Client{Timeout: timeout}
-	resp, err := client.Post(url, "application/json", bytes.NewReader(reqBody))
+	resp, err := client.Post(azureCheckURL, "application/json", bytes.NewReader(reqBody))
 	if err != nil {
 		return false, err
 	}

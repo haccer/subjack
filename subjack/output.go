@@ -96,7 +96,7 @@ func appendText(text, path string) {
 
 func appendJSON(service, url, path string) {
 	var r Result
-	if strings.Contains(service, "DOMAIN") {
+	if strings.HasPrefix(service, "DOMAIN AVAILABLE - ") {
 		r = Result{
 			Subdomain:  strings.ToLower(url),
 			Vulnerable: true,
